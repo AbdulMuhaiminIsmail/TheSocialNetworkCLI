@@ -1,0 +1,3 @@
+﻿  test.cpp
+E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(382,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  TheSocialNetwork.vcxproj -> E:\Programming\TheSocialNetwork\x64\Debug\TheSocialNetwork.exe
