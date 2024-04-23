@@ -7,38 +7,6 @@
 #include<fstream>
 using namespace std;
 
-//Helper Functions
-int idToNum(int start, string id) {
-	string index;
-	for (int i = start; i < id.length(); i++) {
-		index[i - start] = id[i];
-	}
-	return stoi(index);
-}
-
-string getDate() {
-	// Get the current system time point
-	auto now = std::chrono::system_clock::now();
-
-	// Convert system time to time_t
-	std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
-
-	// Convert time_t to a string representation
-	char dateString[11]; // DD/MM/YYYY + '\0'
-	struct tm timeinfo;
-	localtime_s(&timeinfo, &currentTime);
-	std::strftime(dateString, sizeof(dateString), "%d/%m/%Y", &timeinfo);
-
-	// Return the current system date
-	return dateString;
-}
-
-void createUser(string userName, vector <User*>& Users) {
-	User* user = new User(userName);
-	Users.push_back(user);
-	cout << "User " << userName << " created successfully with userID: " << user->getID() << endl;
-}
-
 //Forward Declarations
 class Activity;
 class CommonClass;
@@ -46,6 +14,8 @@ class Page;
 class User;
 class Comment;
 class Post;
+string getDate();
+int idToNum(int, string);
 
 //Classes
 class CommonClass {
@@ -120,6 +90,8 @@ public:
 	string getID();
 	void incLikes();
 	void incComments();
+	void setOwnerID(string ownerID);
+	string getOwnerID();
 	//void showLikedBy(vector <User*>& Users, vector <Page*>& Pages) {
 	//	cout << "----------------------------------------------------------" << endl;
 	//	cout << "Post Liked By: " << endl;
@@ -215,7 +187,7 @@ public:
 		}
 		cout << "----------------------------------------------------------" << endl;
 	}
-	void createPage(string& title, vector <Page*>& Pages) {			//page comment shall be analogous
+	void createPage(string title, vector <Page*>& Pages) {			//page comment shall be analogous
 		Page* page = new Page(CommonClass::getID(), title);
 		ownedPages.push_back(page->getID());
 		Pages.push_back(page);
@@ -239,12 +211,20 @@ public:
 			Activity* activity = new Activity(type);
 			activity->setActivity();
 			Post* post = new Post(description, activity, 0);
+			post->setOwnerID(CommonClass::getID());
+			UserPosts.push_back(post);
+			string currentUserID = CommonClass::getID();
+			int userID = idToNum(1, currentUserID) - 1;
+			Users[userID]->addPost(post->getID());
 		}
-		Post* post = new Post(description, nullptr, 0);
-		UserPosts.push_back(post);						//Added post to main vector to display in file
-		string currentUserID = CommonClass::getID();
-		int userID = idToNum(1, currentUserID) - 1;
-		Users[userID]->addPost(post->getID());			//Added post's address to User's posts vector
+		else {
+			Post* post = new Post(description, nullptr, 0);
+			post->setOwnerID(CommonClass::getID());
+			UserPosts.push_back(post);						//Added post to main vector to display in file
+			string currentUserID = CommonClass::getID();
+			int userID = idToNum(1, currentUserID) - 1;
+			Users[userID]->addPost(post->getID());			//Added post's address to User's posts vector
+		}	
 	}
 	void likePage(string& pageID, int& totalPages, vector <Page*>& Pages) {
 		if (pageID[0] != 'p') {
@@ -253,7 +233,7 @@ public:
 		}
 		bool duplicate = false;
 		for (int i = 0; i < totalPages; i++) {
-			if (likedPages[i] == pageID) {
+			if (likedPages.size() > 0 && likedPages[i] == pageID) {
 				duplicate = true;
 				cout << "Can not be added to liked pages since it already is there" << endl;
 				return;
@@ -316,6 +296,12 @@ Post::Post(string description, Activity* activity, int author) : description(des
 string Post::getID() {
 	return postID;
 }
+string Post::getOwnerID() {
+	return ownerID;
+}
+void Post::setOwnerID(string id) {
+	ownerID = id;
+}
 void Post::incLikes() {
 	if (likes < 10) {
 		likes++;
@@ -366,6 +352,38 @@ int Page::currentID = 1;
 int User::currentID = 1;
 int Post::currentID = 1;
 
+//Helper Functions
+int idToNum(int start, string id) {
+	string index;
+	for (int i = start; i < id.length(); i++) {
+		index[i - start] = id[i];
+	}
+	return stoi(index);
+}
+
+string getDate() {
+	// Get the current system time point
+	auto now = std::chrono::system_clock::now();
+
+	// Convert system time to time_t
+	std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
+
+	// Convert time_t to a string representation
+	char dateString[11]; // DD/MM/YYYY + '\0'
+	struct tm timeinfo;
+	localtime_s(&timeinfo, &currentTime);
+	std::strftime(dateString, sizeof(dateString), "%d/%m/%Y", &timeinfo);
+
+	// Return the current system date
+	return dateString;
+}
+
+void createUser(string userName, vector <User*>& Users) {
+	User* user = new User(userName);
+	Users.push_back(user);
+	cout << "User " << userName << " created successfully with userID: " << user->getID() << endl;
+}
+
 //Driver Module
 int main() { 
 	vector <User*> Users;
@@ -375,21 +393,24 @@ int main() {
 	vector <Comment*> Comments;
 
 	createUser("Muhaimin", Users);
-	createUser("Faheem", Users);
-
-	User* muhaimin = Users[0];
-	User* faheem = Users[1];
-	muhaimin->printUser(Users, Pages);
-	string id = "u7";
-	int size = Users.size();
-	muhaimin->addFriend(id, size);
-	muhaimin->printUser(Users, Pages);
-	muhaimin->addFriend(id, size);
-	faheem->printUser(Users, Pages);
-	faheem->addFriend(id, size);
-	faheem->printUser(Users, Pages);
-
-	cout << getDate();
+	createUser("Salman", Users);
+	User* u = Users[0];
+	User* uu = Users[1];
+	string id = uu->getID();
+	int users = Users.size();
+	u->addFriend(id, users);
+	u->printUser(Users, Pages);
+	u->createPage("Al Jazeera", Pages);
+	string pageID = "p1";
+	int pages = Pages.size();
+	uu->likePage(pageID, pages, Pages);
+	uu->showLikedPages(Pages);
+	uu->printUser(Users, Pages);
+	u->printUser(Users, Pages);
+	Pages[0]->viewPage(PagePosts, Users, Pages, Comments);
+	u->createPost(UserPosts, Users);
+	cout<<UserPosts[0]->getOwnerID();
+	UserPosts[0]->showPost(Users, Pages, Comments);
 
 	for (User* user : Users) {
 		delete user;
@@ -402,5 +423,8 @@ int main() {
 	}
 	for (Post* post : PagePosts) {
 		delete post;
+	}
+	for (Comment* comment : Comments) {
+		delete comment;
 	}
 }
