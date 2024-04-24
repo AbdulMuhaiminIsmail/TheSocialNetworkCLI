@@ -1,4 +1,7 @@
 ﻿  test.cpp
-E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(394,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(399,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(553,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(557,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(550,6): warning C4101: 'user': unreferenced local variable
+E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(608,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\test.cpp(613,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   TheSocialNetwork.vcxproj -> E:\Programming\TheSocialNetwork\x64\Debug\TheSocialNetwork.exe

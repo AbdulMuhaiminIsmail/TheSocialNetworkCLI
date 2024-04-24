@@ -10,14 +10,30 @@ using namespace std;
 //Forward Declarations
 class Activity;
 class CommonClass;
+class Date;
 class Page;
 class User;
 class Comment;
 class Post;
-string getDate();
+string getCurrentDate();
 int idToNum(int, string);
 
 //Classes
+class Date {
+	int date;
+	int month;
+	int year;
+public:
+	Date(int date = 0, int month = 0, int year = 0) : date(date), month(month), year(year) {}
+	void print() {
+		if (date == 0 || date > 31 || month == 0 || month > 12 || year <= 0) {
+			cout << "Date is invalid or unspecified" << endl;
+		}
+		else {
+			cout << date << "/" << month << "/" << year << endl;
+		}
+	}
+};
 class CommonClass {
 	string id; //Stores the userID with "u" as prefix or pageID with "p" as prefix
 	string name; //Stores the full name of page/user
@@ -53,22 +69,23 @@ public:
 			string temp;
 			if (type == 1) {
 				cout << "What are you feeling? (Happy/Sad/Excited/Other)" << endl;
-				cin >> temp;
+				getline(cin, temp);
+
 				value = " is feeling " + temp;
 			}
 			else if (type == 2) {
 				cout << "What are you thinking? (Life/Future/Meaning of Life/Other)" << endl;
-				cin >> temp;
+				getline(cin, temp);
 				value = " is thinking about " + temp;
 			}
 			else if (type == 3) {
 				cout << "What are you making? (Money/Arts/Memories/Other)" << endl;
-				cin >> temp;
+				getline(cin, temp);
 				value = " is making " + temp;
 			}
 			else if (type == 4) {
 				cout << "What are you celebrating? (Birthday/Halloween/Success/Other)" << endl;
-				cin >> temp;
+				getline(cin, temp);
 				value = " is celebrating " + temp;
 			}
 		}
@@ -88,25 +105,28 @@ class Post {
 public:
 	Post(string description, Activity* activity, int author);
 	string getID();
+	int getLikesCount();
+	void addLikedBy(string liker);
 	void incLikes();
 	void incComments();
 	void setOwnerID(string ownerID);
+	void addComment(string commentID);
 	string getOwnerID();
-	//void showLikedBy(vector <User*>& Users, vector <Page*>& Pages) {
-	//	cout << "----------------------------------------------------------" << endl;
-	//	cout << "Post Liked By: " << endl;
-	//	for (int i = 0; i < likedBy.size(); i++) {
-	//		int currentIndex = idToNum(1, likedBy[i]) - 1;
-	//		if (likedBy[i][0] == 'u') {
-	//			cout << likedBy[i] << "-" << Users[currentIndex]->getName() << endl;
-	//		}
-	//		else if (likedBy[i][0] == 'p') {
-	//			cout << likedBy[i] << "-" << Pages[currentIndex]->getName() << endl;
-	//		}			
-	//	}
-	//	cout << "----------------------------------------------------------" << endl;
-	//}
+	int getCommentCount();
+	vector <string> getLikedBy();
 	void showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
+};
+class Comment {
+	static int currentID;
+	string commentID;
+	string postID; //Stores the ID of the original Post
+	string posterID; //Stores the ID of Page or User who commented
+	string text; //Stores the text of the comment writen
+public:
+	Comment(string postID, string posterID, string text);
+	string getPostID();
+	string getCommentID();
+	void print(vector <User*> Users, vector <Page*> Pages);
 };
 class Page : public CommonClass {
 	static int currentID; //Keeps track of the current page
@@ -130,13 +150,102 @@ public:
 		return likes;
 	}
 	void incLikes() {
-		likes++;
+		if (likes < 10) {
+			likes++;
+		}
+		else {
+			cout << "The page already has 10 likes, no more allowed" << endl;
+		}
+	}
+	void likePost(string postID, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
+		int index = idToNum(2, postID) - 1;
+		if (postID[0] == 'u') {
+			if (UserPosts[index]->getLikesCount() < 10) {
+				UserPosts[index]->addLikedBy(CommonClass::getID());
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else if (postID[0] == 'p') {
+			if (PagePosts[index]->getLikesCount() < 10) {
+				PagePosts[index]->addLikedBy(CommonClass::getID());
+			} 
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else {
+			cout << "The given post id is invalid" << endl;
+		}
+	}
+	void comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
+		int index = idToNum(2, postID) - 1;
+		if (postID[0] == 'u') {
+			if (UserPosts[index]->getCommentCount() < 10) {
+				Comment* comment = new Comment(postID, CommonClass::getID(), text);
+				Comments.push_back(comment);
+				UserPosts[index]->addComment(comment->getCommentID());
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else if (postID[0] == 'p') {
+			if (PagePosts[index]->getCommentCount() < 10) {
+				Comment* comment = new Comment(postID, CommonClass::getID(), text);
+				Comments.push_back(comment);
+				PagePosts[index]->addComment(comment->getCommentID());
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else {
+			cout << "The given post id is invalid" << endl;
+		}
 	}
 	void viewPage(vector <Post*> PagePosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
 		vector <string> posts = getPosts();
+		cout << getName() << endl;
 		for (int i = 0; i < posts.size(); i++) {
-			int index = idToNum(2, posts[i]);
+			int index = idToNum(2, posts[i]) - 1;
 			PagePosts[index]->showPost(Users, Pages, Comments);
+		}
+	}
+	void createPost(vector <Post*>& PagePosts, vector <Page*>& Pages) {
+		int hasActivity, type;
+		string description;
+		cout << "What is the description of the post? ";
+		getline(cin, description);
+		cout << "Do you want to add any activity? (0.No/1.Yes)";
+		cin >> hasActivity;
+		if (hasActivity) {
+			do {
+				cout << "What kind of activity is this? (1.Feeling/2.Thinking/3.Making/4.Celebrating)";
+				cin >> type;
+				if (type < 1 || type > 4) {
+					cout << "Invalid type" << endl;
+				}
+			} while (type < 1 || type > 4);
+			cin.ignore(256, '\n');
+			Activity* activity = new Activity(type);
+			activity->setActivity();
+			Post* post = new Post(description, activity, 1);
+			post->setOwnerID(CommonClass::getID());
+			PagePosts.push_back(post);
+			string currentPageID = CommonClass::getID();
+			int pageID = idToNum(1, currentPageID) - 1;
+			Pages[pageID]->addPost(post->getID());
+		}
+		else {
+			Post* post = new Post(description, nullptr, 0);
+			post->setOwnerID(CommonClass::getID());
+			PagePosts.push_back(post);						//Added post to main vector to display in file
+			string currentUserID = CommonClass::getID();
+			int userID = idToNum(1, currentUserID) - 1;
+			Pages[userID]->addPost(post->getID());			//Added post's address to Pages' posts vector
+			cin.ignore(256, '\n');
 		}
 	}
 };
@@ -158,7 +267,7 @@ public:
 		cout << "UserID: " << getID() << endl;
 		showFriends(Users);
 		showLikedPages(Pages);
-		showOwnedPages(Pages);	
+		showOwnedPages(Pages);
 	}
 	void showOwnedPages(vector <Page*>& Pages) {
 		cout << "----------------------------------------------------------" << endl;
@@ -193,11 +302,61 @@ public:
 		Pages.push_back(page);
 		cout << "Page created with name " << title << " and id " << page->getID() << endl;
 	}
+	void likePost(string postID, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
+		int index = idToNum(2, postID) - 1;
+		if (postID[0] == 'u') {
+			if (UserPosts[index]->getLikesCount() < 10) {
+				UserPosts[index]->addLikedBy(CommonClass::getID());
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else if (postID[0] == 'p') {
+			if (PagePosts[index]->getLikesCount() < 10) {
+				PagePosts[index]->addLikedBy(CommonClass::getID());
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else {
+			cout << "The given post id is invalid" << endl;
+		}
+	}
+	void comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
+		int index = idToNum(2, postID) - 1;
+		if (postID[0] == 'u') {
+			if (UserPosts[index]->getCommentCount() < 10) {
+				Comment* comment = new Comment(postID, CommonClass::getID(), text);
+				Comments.push_back(comment);
+				UserPosts[index]->addComment(comment->getCommentID());
+				UserPosts[index]->incComments();
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else if (postID[0] == 'p') {
+			if (PagePosts[index]->getCommentCount() < 10) {
+				Comment* comment = new Comment(postID, CommonClass::getID(), text);
+				Comments.push_back(comment);
+				PagePosts[index]->addComment(comment->getCommentID());
+				PagePosts[index]->incComments();
+			}
+			else {
+				cout << "This post already has 10 comments, no further comments are allowed" << endl;
+			}
+		}
+		else {
+			cout << "The given post id is invalid" << endl;
+		}
+	}
 	void createPost(vector <Post*>& UserPosts, vector <User*>& Users) {
 		int hasActivity, type;
 		string description;
 		cout << "What is the description of the post? ";
-		cin >> description;
+		getline(cin, description);
 		cout << "Do you want to add any activity? (0.No/1.Yes)";
 		cin >> hasActivity;
 		if (hasActivity) {
@@ -208,6 +367,7 @@ public:
 					cout << "Invalid type" << endl;
 				}
 			} while (type < 1 || type > 4);
+			cin.ignore(256, '\n');
 			Activity* activity = new Activity(type);
 			activity->setActivity();
 			Post* post = new Post(description, activity, 0);
@@ -224,6 +384,7 @@ public:
 			string currentUserID = CommonClass::getID();
 			int userID = idToNum(1, currentUserID) - 1;
 			Users[userID]->addPost(post->getID());			//Added post's address to User's posts vector
+			cin.ignore(256, '\n');
 		}	
 	}
 	void likePage(string& pageID, int& totalPages, vector <Page*>& Pages) {
@@ -272,20 +433,19 @@ public:
 			cout << "You can not friend yourself" << endl;
 		}
 	}
-};
-class Comment {
-	string postID; //Stores the ID of the original Post
-	string posterID; //Stores the ID of Page or User who commented
-	string text; //Stores the text of the comment writen
-public:
-	Comment(string postID, string posterID, string text);
-	string getPostID();
-	void print(vector <User*> Users, vector <Page*> Pages);
+	void viewTimeline(vector <Post*> UserPosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
+		vector <string> posts = getPosts();
+		cout << getName() << " | Timeline" << endl;
+		for (int i = 0; i < posts.size(); i++) {
+			int index = idToNum(2, posts[i]) - 1;
+			UserPosts[index]->showPost(Users, Pages, Comments);
+		}
+	}
 };
 
 //Class Post's Methods' Definitions
 Post::Post(string description, Activity* activity, int author) : description(description), activity(activity) {
-	datePosted = getDate();
+	datePosted = getCurrentDate();
 	if (author == 0) {										//	0->Userpost		1->Pagepost
 		postID = "up" + to_string(currentID++);
 	}
@@ -299,8 +459,24 @@ string Post::getID() {
 string Post::getOwnerID() {
 	return ownerID;
 }
+vector <string> Post::getLikedBy() {
+	return likedBy;
+}
+void Post::addLikedBy(string liker) {
+	likedBy.push_back(liker);
+	incLikes();
+}
+int Post::getCommentCount() {
+	return commentsCount;
+}
+int Post::getLikesCount() {
+	return likes;
+}
 void Post::setOwnerID(string id) {
 	ownerID = id;
+}
+void Post::addComment(string commentID) {
+	comments.push_back(commentID);
 }
 void Post::incLikes() {
 	if (likes < 10) {
@@ -333,9 +509,12 @@ void Post::showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*
 }
 
 //Class Comment's Methods' Definitions
-Comment::Comment(string postID, string posterID, string text) : postID(postID), posterID(posterID), text(text) {}
+Comment::Comment(string postID, string posterID, string text) : commentID("c" + to_string(currentID++)), postID(postID), posterID(posterID), text(text) {}
 string Comment::getPostID() {
 	return postID;
+}
+string Comment::getCommentID() {
+	return commentID;
 }
 void Comment::print(vector <User*> Users, vector <Page*> Pages) {
 	int index = idToNum(1, posterID) - 1;
@@ -351,6 +530,7 @@ void Comment::print(vector <User*> Users, vector <Page*> Pages) {
 int Page::currentID = 1;
 int User::currentID = 1;
 int Post::currentID = 1;
+int Comment::currentID = 1;
 
 //Helper Functions
 int idToNum(int start, string id) {
@@ -361,7 +541,34 @@ int idToNum(int start, string id) {
 	return stoi(index);
 }
 
-string getDate() {
+void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
+	cout << "----------------------------------------------------------" << endl;
+	cout << "Post Liked By: " << endl;
+	int size;
+	int index = idToNum(2, postID) - 1;
+	vector <string> likedBy;
+	int user;
+	if (postID[0] == 'u') {
+		likedBy = UserPosts[index]->getLikedBy();
+		size = likedBy.size();
+	}
+	else {
+		likedBy = PagePosts[index]->getLikedBy();
+		size = likedBy.size();
+	}
+	for (int i = 0; i < size; i++) {
+		int currentIndex = idToNum(1, likedBy[i]) - 1;
+		if (likedBy[i][0] == 'u') {
+			cout << likedBy[i] << "-" << Users[currentIndex]->getName() << endl;
+		}
+		else {
+			cout << likedBy[i] << "-" << Pages[currentIndex]->getName() << endl;
+		}			
+	}
+	cout << "----------------------------------------------------------" << endl;
+}
+
+string getCurrentDate() {
 	// Get the current system time point
 	auto now = std::chrono::system_clock::now();
 
@@ -392,6 +599,7 @@ int main() {
 	vector <Post*> PagePosts;
 	vector <Comment*> Comments;
 
+	//testing users
 	createUser("Muhaimin", Users);
 	createUser("Salman", Users);
 	User* u = Users[0];
@@ -404,13 +612,37 @@ int main() {
 	string pageID = "p1";
 	int pages = Pages.size();
 	uu->likePage(pageID, pages, Pages);
+	u->likePage(pageID, pages, Pages);
+	cout << "Likes: " << Pages[0]->getLikes() << endl;
 	uu->showLikedPages(Pages);
 	uu->printUser(Users, Pages);
 	u->printUser(Users, Pages);
 	Pages[0]->viewPage(PagePosts, Users, Pages, Comments);
 	u->createPost(UserPosts, Users);
-	cout<<UserPosts[0]->getOwnerID();
-	UserPosts[0]->showPost(Users, Pages, Comments);
+	u->likePost("up1", UserPosts, PagePosts);
+	uu->likePost("up1", UserPosts, PagePosts);
+	u->comment("up1", "Wow", Comments, UserPosts, PagePosts);
+	uu->comment("up1", "Wow", Comments, UserPosts, PagePosts);
+	
+	//testing pages
+	Page* page = Pages[0];
+	page->comment("up1", "Nice", Comments, UserPosts, PagePosts);
+	page->likePost("up1", UserPosts, PagePosts);
+	u->viewTimeline(UserPosts, Users, Pages, Comments);
+	showLikedBy("up1", Users, Pages, UserPosts, PagePosts);
+	//page->createPost(PagePosts, Pages);
+	//page->createPost(PagePosts, Pages);
+	//page->createPost(PagePosts, Pages);
+	//page->createPost(PagePosts, Pages);
+	//page->viewPage(PagePosts, Users, Pages, Comments);
+	
+
+
+
+
+
+
+
 
 	for (User* user : Users) {
 		delete user;
