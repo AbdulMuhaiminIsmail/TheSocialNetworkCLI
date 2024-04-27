@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,12 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source.cpp" />
-    <ClCompile Include="date+time.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="AppClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="users.txt" />
+    <ClInclude Include="ActivityClass.hpp" />
+    <ClInclude Include="ChronoClass.hpp" />
+    <ClInclude Include="CommentClass.hpp" />
+    <ClInclude Include="EntityClass.hpp" />
+    <ClInclude Include="HelperClass.hpp" />
+    <ClInclude Include="PageClass.hpp" />
+    <ClInclude Include="PostClass.hpp" />
+    <ClInclude Include="UserClass.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -126,6 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>E:\Programming\TheSocialNetwork\TheSocialNetwork\Headers;E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
