@@ -2,20 +2,17 @@
 #include<iostream>
 #include<string>
 #include<vector>
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/EntityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PageClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PostClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/CommentClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ActivityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/HelperClass.hpp"
-using namespace std;
 
-class Entity;
-class Page;
-class Post;
-class Comment;
-class Activity;
-class Helper;
+#include "HelperClass.hpp"
+#include "ChronoClass.hpp"
+#include "ActivityClass.hpp"
+#include "CommentClass.hpp"
+#include "PostClass.hpp"
+#include "PageClass.hpp"
+#include "UserClass.hpp"
+#include "EntityClass.hpp"
+
+using namespace std;
 
 class User : public Entity {
 	static int currentID; //Keeps track of the current user
@@ -38,5 +35,7 @@ public:
 	void addFriend(string& friendID, int& totalUsers);
 	void viewTimeline(vector <Post*> UserPosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
 	void viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post*> PagePosts, vector <Page*> Pages, vector <Comment*> Comments);
+	void shareMemory(string postID, string text, vector<Post*> UserPosts, vector<User*> Users);
+	void seeMemories(vector<User*> Users, vector<Post*> UserPosts, vector<Page*> Pages, vector<Comment*> Comments);
 };
 

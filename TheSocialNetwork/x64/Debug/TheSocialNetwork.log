@@ -1,13 +1,10 @@
 ﻿  AppClass.cpp
-E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\PostClass.cpp(65,35): warning C4129: ' ': unrecognized character escape sequence
+E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\HelperClass.cpp(39,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   (compiling source file 'AppClass.cpp')
   
-E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\HelperClass.cpp(19,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\HelperClass.cpp(43,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   (compiling source file 'AppClass.cpp')
   
-E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\HelperClass.cpp(23,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'AppClass.cpp')
-  
-E:\Programming\TheSocialNetwork\TheSocialNetwork\AppClass.cpp(58,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-E:\Programming\TheSocialNetwork\TheSocialNetwork\AppClass.cpp(77,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\AppClass.cpp(56,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Programming\TheSocialNetwork\TheSocialNetwork\AppClass.cpp(75,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   TheSocialNetwork.vcxproj -> E:\Programming\TheSocialNetwork\x64\Debug\TheSocialNetwork.exe

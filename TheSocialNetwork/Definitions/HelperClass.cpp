@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/HelperClass.hpp"
+#include"../Headers/HelperClass.hpp"
 
 int idToNum(int start, string id) {
 	string index;
@@ -6,6 +6,26 @@ int idToNum(int start, string id) {
 		index[i - start] = id[i];
 	}
 	return stoi(index);
+}
+
+string getTimeAgo(Post* source) {
+	string timeAgo;
+	if (source->getDatePosted().year != getCurrentDate()->year) {
+		int years = getCurrentDate()->year - source->getDatePosted().year;
+		timeAgo = "(" + to_string(years) + " Years Ago)";
+	}
+	else if (source->getDatePosted().month != getCurrentDate()->month) {
+		int months = getCurrentDate()->month - source->getDatePosted().month;
+		timeAgo = "(" + to_string(months) + " Months Ago)";
+	}
+	else if (source->getDatePosted().day != getCurrentDate()->day) {
+		int days = getCurrentDate()->day - source->getDatePosted().day;
+		timeAgo = "(" + to_string(days) + " Days Ago)";
+	}
+	else {
+		timeAgo = "Just a while ago";
+	}
+	return timeAgo;
 }
 
 void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
@@ -34,26 +54,9 @@ void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, ve
 	cout << "----------------------------------------------------------" << endl;
 }
 
-Date getCurrentDate() {
-	// Get the current time
-	time_t currentTime;
-	time(&currentTime);
-
-	// Convert the current time to a tm structure
-	tm localTime;
-	if (localtime_s(&localTime, &currentTime) != 0) {
-		// Handle error if localtime_s fails
-		// For simplicity, we'll return a default constructed Date object
-		return Date(); // This returns a Date object with all members initialized to 0
-	}
-
-	// Create a Date object and fill it with the current date components
-	Date currentDate;
-	currentDate.day = localTime.tm_mday;
-	currentDate.month = localTime.tm_mon + 1; // tm_mon is 0-based
-	currentDate.year = localTime.tm_year + 1900; // tm_year is years since 1900
-
-	return currentDate;
+Date *getCurrentDate() {
+	Date* temp = new Date;
+	return temp;
 }
 
 

@@ -4,13 +4,17 @@
 #include<vector>
 #include<chrono>
 #include<ctime>
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/EntityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PageClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PostClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/CommentClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ActivityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/HelperClass.hpp"
+
+#include "HelperClass.hpp"
+#include "ActivityClass.hpp"
+#include "CommentClass.hpp"
+#include "PostClass.hpp"
+#include "PageClass.hpp"
+#include "UserClass.hpp"
+#include "EntityClass.hpp"
+
 using namespace std;
+
 class Date {
 public:
 	int day;
@@ -18,10 +22,10 @@ public:
 	int year;
 	Date();
 	Date(int day, int month, int year);
-	string getTimeDate();
-	string getCurrentDate();
+	string stringDate();
 	void print() const;
 	void operator = (const Date& d2);
+	bool operator == (const Date& d2);
 };
 
 

@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PageClass.hpp"
+#include"../Headers/PageClass.hpp"
 
 Page::Page(string ownerID, string title) : Entity("p" + to_string(currentID++), title), ownerID(ownerID) { likes = 0; }
 string Page::getID() {

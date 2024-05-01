@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/UserClass.hpp"
+#include"../Headers/UserClass.hpp"
 
 User::User(string userName) : Entity("u" + to_string(currentID++), userName) {}
 string User::getID() {
@@ -188,7 +188,7 @@ void User::viewTimeline(vector <Post*> UserPosts, vector <User*> Users, vector <
 }
 void User::viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post*> PagePosts, vector <Page*> Pages, vector <Comment*> Comments) {
 	cout << getName() << "-Home Page" << endl;
-	Date currentDate = getCurrentDate();
+	Date currentDate = *getCurrentDate();
 	for (int i = 0; i < friends.size(); i++)
 	{
 		int index = idToNum(1, friends[i]) - 1;
@@ -197,10 +197,10 @@ void User::viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post
 		{
 			int index2 = idToNum(2, posts[j]) - 1;
 			Date datePosted = UserPosts[index2]->getDatePosted();
-			if(oneDayDiff(currentDate, datePosted))
+			if (oneDayDiff(currentDate, datePosted))
 				UserPosts[index2]->showPost(Users, Pages, Comments);
-		}	
-	}	
+		}
+	}
 
 	for (int i = 0; i < likedPages.size(); i++)
 	{
@@ -210,11 +210,41 @@ void User::viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post
 		{
 			int index2 = idToNum(2, posts[j]) - 1;
 			Date datePosted = PagePosts[index2]->getDatePosted();
-			if(oneDayDiff(currentDate, datePosted))
+			if (oneDayDiff(currentDate, datePosted))
 				PagePosts[index2]->showPost(Users, Pages, Comments);
-		}	
-	}	
-
+		}
+	}
 }
+void User::shareMemory(string postID, string text, vector<Post*> UserPosts, vector<User*> Users) {
+	Post* source = UserPosts[idToNum(2, postID) - 1];
+	string timeAgo = getTimeAgo(source);
+	string description = source->getDescription();
+	Date date = source->getDatePosted();
+	string userName = Users[idToNum(1, source->getOwnerID()) - 1]->getName();
+	Activity* activity = source->getActivity();
+	string memory;
+	if (activity != nullptr)
+		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + activity->getValue() + "\n   \"" + description + "\"...(" + date.stringDate() + ")";
+	else
+		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + "shared \"" + description + "\"...(" + date.stringDate() + ")";
+	Post* post = new Post(memory, nullptr, 0);
+	post->setOwnerID(Entity::getID());
+	UserPosts.push_back(post);
+	Users[idToNum(1, Entity::getID()) - 1]->addPost(post->getID());
+}
+void User::seeMemories(vector<User*> Users, vector<Post*> UserPosts, vector<Page*> Pages, vector<Comment*> Comments) {
+	//show post on same date in following years
+	cout << "We hope you enjoy looking back and sharing your memories on Facebook, from the most recent to those long ago.\n\n";
+	vector <string> posts = getPosts();
+	for (int i = 0; i < posts.size(); i++) {
+		Date date = UserPosts[idToNum(2, posts[i]) - 1]->getDatePosted();
+		Date currentDate = *getCurrentDate();
+		if (currentDate.year - date.year > 0 && currentDate.month == date.month && currentDate.day == date.day) {
+			cout << "On this Day\n" + getTimeAgo(UserPosts[idToNum(2, posts[i]) - 1]);
+			UserPosts[idToNum(2, posts[i]) - 1]->showPost(Users, Pages, Comments);
+		}
+	}
+}
+
 //Static Data
 int User::currentID = 1;

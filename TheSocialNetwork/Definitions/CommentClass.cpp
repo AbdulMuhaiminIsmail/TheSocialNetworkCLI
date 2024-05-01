@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/CommentClass.hpp"
+#include"../Headers/CommentClass.hpp"
 
 Comment::Comment(string postID, string posterID, string text) : commentID("c" + to_string(currentID++)), postID(postID), posterID(posterID), text(text) {}
 string Comment::getPostID() {

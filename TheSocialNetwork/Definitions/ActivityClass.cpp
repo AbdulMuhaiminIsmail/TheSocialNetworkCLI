@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ActivityClass.hpp"
+#include"../Headers/ActivityClass.hpp"
 
 Activity::Activity(int type, string value) : type(type), value(value) {}
 int Activity::getType() const {

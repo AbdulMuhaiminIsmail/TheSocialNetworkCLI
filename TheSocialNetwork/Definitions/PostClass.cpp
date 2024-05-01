@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PostClass.hpp"
+#include"../Headers/PostClass.hpp"
 
 Post::Post(string description, Activity* activity, int author) : description(description), activity(activity) {
 	datePosted = getCurrentDate();
@@ -15,6 +15,12 @@ string Post::getID() const {
 string Post::getOwnerID() const {
 	return ownerID;
 }
+string Post::getDescription() const {
+	return description;
+}
+Activity* Post::getActivity() const {
+	return activity;
+}
 int Post::getCommentCount() const {
 	return commentsCount;
 }
@@ -22,10 +28,7 @@ int Post::getLikesCount() const {
 	return likes;
 }
 Date Post::getDatePosted() const {
-	return datePosted;
-}
-void Post::setDatePosted(Date& date) {
-	datePosted = date;
+	return *datePosted; //CHANGED
 }
 vector <string> Post::getLikedBy() {
 	return likedBy;
@@ -62,7 +65,7 @@ void Post::showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*
 		cout << " shared \"" << description << "\"" << endl;
 	}
 	else {
-		cout << activity->getValue() << "\n\    \"" << description << "\"" << endl;
+		cout << activity->getValue() << "\n\t\"" << description << "\"" << endl;
 	}
 	for (int i = 0; i < comments.size(); i++) {
 		int index = idToNum(1, comments[i]) - 1;

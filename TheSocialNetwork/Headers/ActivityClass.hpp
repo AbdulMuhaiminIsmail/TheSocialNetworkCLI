@@ -2,11 +2,13 @@
 #include<iostream>
 #include<string>
 #include<vector>
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/EntityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PageClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PostClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/CommentClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/HelperClass.hpp"
+
+#include"EntityClass.hpp"
+#include"PageClass.hpp"
+#include"PostClass.hpp"
+#include"CommentClass.hpp"
+#include"HelperClass.hpp"
+
 using namespace std;
 
 class Activity {

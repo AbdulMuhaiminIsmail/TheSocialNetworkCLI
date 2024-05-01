@@ -2,18 +2,18 @@
 #include<iostream>
 #include<string>
 #include<vector>
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/EntityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/UserClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PageClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PostClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ChronoClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ActivityClass.hpp"
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/HelperClass.hpp"
+
+#include "HelperClass.hpp"
+#include "ChronoClass.hpp"
+#include "ActivityClass.hpp"
+#include "CommentClass.hpp"
+#include "PostClass.hpp"
+#include "PageClass.hpp"
+#include "UserClass.hpp"
+#include "EntityClass.hpp"
+
 using namespace std;
 
-class User;
-class Page;
-	
 class Comment {
 	static int currentID;
 	string commentID;

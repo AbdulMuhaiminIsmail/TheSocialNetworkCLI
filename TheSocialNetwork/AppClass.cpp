@@ -1,36 +1,35 @@
+//																		***GUIDELINES AND WHAT I LEARNT***
+//Header files and classes must not have the same name
+//Try adding forward declarations in case stuff does not work
+//Professionaly speaking, make header and implementation files separately
+//Keep committing to the main branch to keep track of code changes on GitHub
+//Use pragma once and guards to thwart cases of circular dependencies and self inclusion
+//Included header files and implementation files go to external dependencies so they should not be reincluded in the project anywhere else
+//When working in a large project, prefer aggregation over composition as it would throw a bunch of errors when not working with pointers
+
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/EntityClass.cpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/UserClass.cpp"
+#include "Definitions/EntityClass.cpp"
+#include "Definitions/UserClass.cpp"
+#include "Definitions/ChronoClass.cpp"
+#include "Definitions/PageClass.cpp"
+#include "Definitions/PostClass.cpp"
+#include "Definitions/CommentClass.cpp"
+#include "Definitions/ActivityClass.cpp"
+#include "Definitions/HelperClass.cpp"
 
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/PageClass.cpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/PostClass.cpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/CommentClass.cpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/ChronoClass.cpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/ActivityClass.cpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Definitions/HelperClass.cpp"
-
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/HelperClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ChronoClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ActivityClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/CommentClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PostClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/PageClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/UserClass.hpp"
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/EntityClass.hpp"
+#include "Headers/HelperClass.hpp"
+#include "Headers/ChronoClass.hpp"
+#include "Headers/ActivityClass.hpp"
+#include "Headers/CommentClass.hpp"
+#include "Headers/PostClass.hpp"
+#include "Headers/PageClass.hpp"
+#include "Headers/UserClass.hpp"
+#include "Headers/EntityClass.hpp"
 
 using namespace std;
-
-class Entity;
-class User;
-class Page;
-class Post;
-class Comment;
-class Activity;
-class Helper;
-class Date;
 
 class App
 {
@@ -51,7 +50,6 @@ public:
 		u->createPage("Al Jazeera", Pages);
 		u->createPage("CNN", Pages);
 		Page *page = Pages[0];
-
 
 		//adding user as friend
 		string id = uu->getID();
@@ -87,14 +85,18 @@ public:
 		u->viewHome(UserPosts, Users, PagePosts, Pages, Comments);
 		uu->viewHome(UserPosts, Users, PagePosts, Pages, Comments);
 		
-		Date date(25, 4, 2024);
-		UserPosts[1]->setDatePosted(date);
-		u->viewHome(UserPosts, Users, PagePosts, Pages, Comments);
+		//Dates and home
+		// Date date(25, 4, 2024);
+		// UserPosts[1]->setDatePosted(date);
+		// u->viewHome(UserPosts, Users, PagePosts, Pages, Comments);
 
+		//Memories
+		u->seeMemories(Users, UserPosts, Pages, Comments);
+		u->shareMemory("up1", "I did this shit", UserPosts, Users);
+		u->viewHome(UserPosts, Users, PagePosts, Pages, Comments);
 
 		//Deallocating memory
 		DeallocMem(Users, Pages, UserPosts, PagePosts, Comments);
-		
 	}
 	void DeallocMem(vector<User*>& Users, vector<Page*>& Pages, vector<Post*>& UserPosts, vector<Post*>& PagePosts, vector<Comment*>& Comments) {
 		for (User *user : Users)

@@ -1,4 +1,4 @@
-#include"E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/EntityClass.hpp"
+#include"../Headers/EntityClass.hpp"
 
 Entity::Entity(string id, string name) : id(id), name(name) {}
 string Entity::getID() {

@@ -1,9 +1,9 @@
-#include "E:/Programming/TheSocialNetwork/TheSocialNetwork/Headers/ChronoClass.hpp"
+#include "../Headers/ChronoClass.hpp"
 
 Date::Date() : day(0), month(0), year(0) {}
 Date::Date(int day, int month, int year) : day(day), month(month), year(year) {}
-bool operator == (Date& d1, Date& d2) {
-    return( (d1.day == d2.day) && (d1.month == d2.month) && (d1.year == d2.year) );
+bool Date::operator == (const Date& d2) {
+    return( (day == d2.day) && (month == d2.month) && (year == d2.year) );
 }
 void Date::operator = (const Date& d2) {
     day = d2.day;
@@ -17,4 +17,8 @@ void Date::print() const {
     else {
         cout << day << "/" << month << "/" << year << endl;
     }
+}
+string Date::stringDate() {
+    string date = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    return date;
 }
