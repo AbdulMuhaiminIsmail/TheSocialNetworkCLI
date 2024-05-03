@@ -21,9 +21,16 @@ class Comment {
 	string posterID; //Stores the ID of Page or User who commented
 	string text; //Stores the text of the comment writen
 public:
+	Comment();
 	Comment(string postID, string posterID, string text);
-	string getPostID();
-	string getCommentID();
+	string getPostID() const;
+	string getCommentID() const;
+	string getPosterID() const;
+	string getText() const;
+	void setPostID(string postID);
+	void setCommentID(string commentID);
+	void setPosterID(string posterID);
+	void setText(string text);
 	void print(vector <User*> Users, vector <Page*> Pages);
 };
 

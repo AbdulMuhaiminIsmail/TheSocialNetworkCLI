@@ -1,5 +1,5 @@
 #include"../Headers/PageClass.hpp"
-
+Page::Page() : Entity() {}
 Page::Page(string ownerID, string title) : Entity("p" + to_string(currentID++), title), ownerID(ownerID) { likes = 0; }
 string Page::getID() {
 	return Entity::getID();
@@ -16,6 +16,23 @@ string Page::getOwnerID() {
 int Page::getLikes() {
 	return likes;
 }
+void Page::setID(string ID) {
+	Entity::setID(ID);
+}
+
+void Page::setName(string name) {
+	Entity::setName(name);
+}
+void Page::setPosts(vector <string> posts) {
+	Entity::setPosts(posts);
+}
+
+void Page::setLikes(int likes) {
+	this->likes = likes;
+}
+void Page::setOwnerID(string ownerID) {
+	this->ownerID = ownerID;
+}
 void Page::incLikes() {
 	if (likes < 10) {
 		likes++;
@@ -24,63 +41,43 @@ void Page::incLikes() {
 		cout << "The page already has 10 likes, no more allowed" << endl;
 	}
 }
-void Page::likePost(string postID, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
-	int index = idToNum(2, postID) - 1;
-	if (postID[0] == 'u') {
-		if (UserPosts[index]->getLikesCount() < 10) {
-			UserPosts[index]->addLikedBy(Entity::getID());
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else if (postID[0] == 'p') {
-		if (PagePosts[index]->getLikesCount() < 10) {
-			PagePosts[index]->addLikedBy(Entity::getID());
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else {
-		cout << "The given post id is invalid" << endl;
-	}
-}
-void Page::comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
-	int index = idToNum(2, postID) - 1;
-	if (postID[0] == 'u') {
-		if (UserPosts[index]->getCommentCount() < 10) {
-			Comment* comment = new Comment(postID, Entity::getID(), text);
-			Comments.push_back(comment);
-			UserPosts[index]->addComment(comment->getCommentID());
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else if (postID[0] == 'p') {
-		if (PagePosts[index]->getCommentCount() < 10) {
-			Comment* comment = new Comment(postID, Entity::getID(), text);
-			Comments.push_back(comment);
-			PagePosts[index]->addComment(comment->getCommentID());
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else {
-		cout << "The given post id is invalid" << endl;
-	}
-}
-void Page::viewPage(vector <Post*> PagePosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
+void Page::viewPage(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
 	vector <string> posts = getPosts();
 	cout << getName() << endl;
 	for (int i = 0; i < posts.size(); i++) {
-		int index = idToNum(2, posts[i]) - 1;
-		PagePosts[index]->showPost(Users, Pages, Comments);
+		int index = idToNum(4, posts[i]) - 1;
+		Posts[index]->showPost(Users, Pages, Comments);
 	}
 }
-void Page::createPost(vector <Post*>& PagePosts, vector <Page*>& Pages) {
+void Page::likePost(string postID, vector <Post*>& Posts) {
+	int index = idToNum(4, postID) - 1;
+	if (index >= Posts.size() || index < 0) {
+		cout << "The given post id is invalid" << endl;
+		return;
+	}
+	if (Posts[index]->getLikesCount() < 10) {
+		Posts[index]->addLikedBy(Entity::getID());
+	}
+	else {
+		cout << "This post already has 10 comments, no further comments are allowed" << endl;
+	}
+}
+void Page::comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& Posts) {
+	int index = idToNum(4, postID) - 1;
+	if (index >= Posts.size() || index < 0) {
+		cout << "The given post id is invalid" << endl;
+		return;
+	}
+	if (Posts[index]->getCommentCount() < 10) {
+		Comment* comment = new Comment(postID, Entity::getID(), text);
+		Comments.push_back(comment);
+		Posts[index]->addComment(comment->getCommentID());
+	}
+	else {
+		cout << "This post already has 10 comments, no further comments are allowed" << endl;
+	}
+}
+void Page::createPost(vector <Post*>& Posts, vector <Page*>& Pages) {
 	int hasActivity, type;
 	string description;
 	cout << "What is the description of the post? ";
@@ -98,17 +95,17 @@ void Page::createPost(vector <Post*>& PagePosts, vector <Page*>& Pages) {
 		cin.ignore(256, '\n');
 		Activity* activity = new Activity(type);
 		activity->setActivity();
-		Post* post = new Post(description, activity, 1);
+		Post* post = new Post(description, activity, 0);
 		post->setOwnerID(Entity::getID());
-		PagePosts.push_back(post);
+		Posts.push_back(post);
 		string currentPageID = Entity::getID();
 		int pageID = idToNum(1, currentPageID) - 1;
 		Pages[pageID]->addPost(post->getID());
 	}
 	else {
-		Post* post = new Post(description, nullptr, 1);
+		Post* post = new Post(description, nullptr, 0);
 		post->setOwnerID(Entity::getID());
-		PagePosts.push_back(post);						//Added post to main vector to display in file
+		Posts.push_back(post);						//Added post to main vector to display in file
 		string currentUserID = Entity::getID();
 		int userID = idToNum(1, currentUserID) - 1;
 		Pages[userID]->addPost(post->getID());			//Added post's address to Pages' posts vector

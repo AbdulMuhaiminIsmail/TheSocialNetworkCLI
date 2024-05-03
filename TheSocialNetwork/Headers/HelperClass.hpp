@@ -16,7 +16,7 @@ using namespace std;
 
 //Helper Functions
 int idToNum(int start, string id);
-void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& UserPosts, vector <Post*>& PagePosts);
+void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& Posts);
 void createUser(string userName, vector <User*>& Users);
 bool oneDayDiff(Date& d1, Date& d2);
 string getTimeAgo(Post* source);

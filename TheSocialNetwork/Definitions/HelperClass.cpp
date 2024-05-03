@@ -23,26 +23,17 @@ string getTimeAgo(Post* source) {
 		timeAgo = "(" + to_string(days) + " Days Ago)";
 	}
 	else {
-		timeAgo = "Just a while ago";
+		timeAgo = "(Just a while ago)";
 	}
 	return timeAgo;
 }
 
-void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
+void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& Posts) {
 	cout << "----------------------------------------------------------" << endl;
 	cout << "Post Liked By: " << endl;
-	int size;
-	int index = idToNum(2, postID) - 1;
+	int index = idToNum(4, postID) - 1;
 	vector <string> likedBy;
-	if (postID[0] == 'u') {
-		likedBy = UserPosts[index]->getLikedBy();
-		size = likedBy.size();
-	}
-	else {
-		likedBy = PagePosts[index]->getLikedBy();
-		size = likedBy.size();
-	}
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < Posts.size(); i++) {
 		int currentIndex = idToNum(1, likedBy[i]) - 1;
 		if (likedBy[i][0] == 'u') {
 			cout << likedBy[i] << "-" << Users[currentIndex]->getName() << endl;
@@ -54,9 +45,22 @@ void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, ve
 	cout << "----------------------------------------------------------" << endl;
 }
 
-Date *getCurrentDate() {
-	Date* temp = new Date;
-	return temp;
+Date* getCurrentDate() {
+	// Get the current time
+	std::time_t currentTime;
+	std::time(&currentTime);
+
+	// Convert the current time to a tm structure
+	std::tm localTime;
+	localtime_s(&localTime, &currentTime);
+
+	// Create a new Date object and fill it with the current date components
+	Date* currentDate = new Date;
+	currentDate->day = localTime.tm_mday;
+	currentDate->month = localTime.tm_mon + 1; // tm_mon is 0-based
+	currentDate->year = localTime.tm_year + 1900; // tm_year is years since 1900
+
+	return currentDate;
 }
 
 

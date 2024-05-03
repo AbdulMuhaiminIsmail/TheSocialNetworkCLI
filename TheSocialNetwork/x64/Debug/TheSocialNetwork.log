@@ -1,10 +1,1 @@
-﻿  AppClass.cpp
-E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\HelperClass.cpp(39,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'AppClass.cpp')
-  
-E:\Programming\TheSocialNetwork\TheSocialNetwork\Definitions\HelperClass.cpp(43,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'AppClass.cpp')
-  
-E:\Programming\TheSocialNetwork\TheSocialNetwork\AppClass.cpp(56,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-E:\Programming\TheSocialNetwork\TheSocialNetwork\AppClass.cpp(75,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  TheSocialNetwork.vcxproj -> E:\Programming\TheSocialNetwork\x64\Debug\TheSocialNetwork.exe
+﻿  TheSocialNetwork.vcxproj -> E:\Programming\TheSocialNetwork\x64\Debug\TheSocialNetwork.exe

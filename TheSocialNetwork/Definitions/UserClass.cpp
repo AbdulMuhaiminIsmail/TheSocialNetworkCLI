@@ -1,11 +1,50 @@
 #include"../Headers/UserClass.hpp"
-
+User::User() : Entity() {}
 User::User(string userName) : Entity("u" + to_string(currentID++), userName) {}
-string User::getID() {
+void User::setID(string id) {
+	Entity::setID(id);
+}
+void User::setName(string name) {
+	Entity::setName(name);
+}
+void User::setPosts(vector <string> posts) {
+	Entity::setPosts(posts);	
+}
+void User::setFriends(vector <string> friends) {
+	for (int i = 0; i < friends.size(); i++)
+	{
+		this->friends.push_back(friends[i]);
+	}
+}
+void User::setOwnedPages(vector <string> ownedPages) {
+	for (int i = 0; i < ownedPages.size(); i++)
+	{
+		this->ownedPages.push_back(ownedPages[i]);
+	}
+}
+void User::setLikedPages(vector <string> likedPages) {
+	for (int i = 0; i < likedPages.size(); i++)
+	{
+		this->likedPages.push_back(likedPages[i]);
+	}
+}
+string User::getID() const {
 	return Entity::getID();
 }
-string User::getName() {
+string User::getName() const {
 	return Entity::getName();
+}
+vector <string> User::getPosts() const {
+	return Entity::getPosts();
+}
+vector <string> User::getFriends() const {
+	return friends;
+}
+vector <string> User::getOwnedPages() const {
+	return ownedPages;
+}
+vector <string> User::getLikedPages() const {
+	return likedPages;
 }
 void User::printUser(vector <User*> Users, vector <Page*> Pages) {
 	cout << "Name: " << getName() << endl;
@@ -47,57 +86,7 @@ void User::createPage(string title, vector <Page*>& Pages) {			//page comment sh
 	Pages.push_back(page);
 	cout << "Page created with name " << title << " and id " << page->getID() << endl;
 }
-void User::likePost(string postID, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
-	int index = idToNum(2, postID) - 1;
-	if (postID[0] == 'u') {
-		if (UserPosts[index]->getLikesCount() < 10) {
-			UserPosts[index]->addLikedBy(Entity::getID());
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else if (postID[0] == 'p') {
-		if (PagePosts[index]->getLikesCount() < 10) {
-			PagePosts[index]->addLikedBy(Entity::getID());
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else {
-		cout << "The given post id is invalid" << endl;
-	}
-}
-void User::comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& UserPosts, vector <Post*>& PagePosts) {
-	int index = idToNum(2, postID) - 1;
-	if (postID[0] == 'u') {
-		if (UserPosts[index]->getCommentCount() < 10) {
-			Comment* comment = new Comment(postID, Entity::getID(), text);
-			Comments.push_back(comment);
-			UserPosts[index]->addComment(comment->getCommentID());
-			UserPosts[index]->incComments();
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else if (postID[0] == 'p') {
-		if (PagePosts[index]->getCommentCount() < 10) {
-			Comment* comment = new Comment(postID, Entity::getID(), text);
-			Comments.push_back(comment);
-			PagePosts[index]->addComment(comment->getCommentID());
-			PagePosts[index]->incComments();
-		}
-		else {
-			cout << "This post already has 10 comments, no further comments are allowed" << endl;
-		}
-	}
-	else {
-		cout << "The given post id is invalid" << endl;
-	}
-}
-void User::createPost(vector <Post*>& UserPosts, vector <User*>& Users) {
+void User::createPost(vector<Post*>& Posts) {
 	int hasActivity, type;
 	string description;
 	cout << "What is the description of the post? ";
@@ -117,28 +106,52 @@ void User::createPost(vector <Post*>& UserPosts, vector <User*>& Users) {
 		activity->setActivity();
 		Post* post = new Post(description, activity, 0);
 		post->setOwnerID(Entity::getID());
-		UserPosts.push_back(post);
-		string currentUserID = Entity::getID();
-		int userID = idToNum(1, currentUserID) - 1;
-		Users[userID]->addPost(post->getID());
+		Posts.push_back(post);
+		addPost(post->getID());
 	}
 	else {
 		Post* post = new Post(description, nullptr, 0);
 		post->setOwnerID(Entity::getID());
-		UserPosts.push_back(post);						//Added post to main vector to display in file
-		string currentUserID = Entity::getID();
-		int userID = idToNum(1, currentUserID) - 1;
-		Users[userID]->addPost(post->getID());			//Added post's address to User's posts vector
+		Posts.push_back(post);						//Added post to main vector to display in file
+		addPost(post->getID());					//Added post's address to User's posts vector
 		cin.ignore(256, '\n');
 	}
 }
-void User::likePage(string pageID, int& totalPages, vector <Page*>& Pages) {
+void User::likePost(string postID, vector <Post*>& Posts) {
+	int index = idToNum(4, postID) - 1;
+	if (index >= Posts.size() || index < 0) {
+		cout << "The given post id is invalid" << endl;
+		return;
+	}
+	if (Posts[index]->getLikesCount() < 10) {
+		Posts[index]->addLikedBy(Entity::getID());
+	}
+	else {
+		cout << "This post already has 10 comments, no further comments are allowed" << endl;
+	}
+}
+void User::comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& Posts) {
+	int index = idToNum(4, postID) - 1;
+	if (index >= Posts.size() || index < 0) {
+		cout << "The given post id is invalid" << endl;
+		return;
+	}
+	if (Posts[index]->getCommentCount() < 10) {
+		Comment* comment = new Comment(postID, Entity::getID(), text);
+		Comments.push_back(comment);
+		Posts[index]->addComment(comment->getCommentID());
+	}
+	else {
+		cout << "This post already has 10 comments, no further comments are allowed" << endl;
+	}
+}
+void User::likePage(string pageID, vector <Page*>& Pages) {
 	if (pageID[0] != 'p') {
 		cout << "The given Page ID is invalid" << endl;
 		return;
 	}
 	bool duplicate = false;
-	for (int i = 0; i < totalPages; i++) {
+	for (int i = 0; i < Pages.size(); i++) {
 		if (likedPages.size() > 0 && likedPages[i] == pageID) {
 			duplicate = true;
 			cout << "Can not be added to liked pages since it already is there" << endl;
@@ -152,7 +165,7 @@ void User::likePage(string pageID, int& totalPages, vector <Page*>& Pages) {
 		cout << "Page added to liked pages successfully" << endl;
 	}
 }
-void User::addFriend(string& friendID, int& totalUsers) {
+void User::addFriend(string friendID, vector<User*> Users) {
 	if (friendID[0] != 'u') {
 		cout << "The given User ID is invalid" << endl;
 		return;
@@ -161,12 +174,12 @@ void User::addFriend(string& friendID, int& totalUsers) {
 	for (int i = 0; i < friends.size(); i++) {
 		if (friends[i] == friendID) {
 			duplicate = true;
-			cout << friendID << " is already your friend" << endl;
+			cout << Users[idToNum(1, friendID) - 1]->getName() << " is already your friend" << endl;
 			return;
 		}
 	}
 	if (friendID != getID()) {
-		if (idToNum(1, friendID) <= totalUsers) {
+		if (idToNum(1, friendID)  <= Users.size()) {
 			friends.push_back(friendID);
 			cout << "Friend added successfully" << endl;
 		}
@@ -178,16 +191,16 @@ void User::addFriend(string& friendID, int& totalUsers) {
 		cout << "You can not friend yourself" << endl;
 	}
 }
-void User::viewTimeline(vector <Post*> UserPosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
+void User::viewTimeline(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
 	vector <string> posts = getPosts();
 	cout << getName() << " | Timeline" << endl;
 	for (int i = 0; i < posts.size(); i++) {
-		int index = idToNum(2, posts[i]) - 1;
-		UserPosts[index]->showPost(Users, Pages, Comments);
+		int index = idToNum(4, posts[i]) - 1;
+		Posts[index]->showPost(Users, Pages, Comments);
 	}
 }
-void User::viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post*> PagePosts, vector <Page*> Pages, vector <Comment*> Comments) {
-	cout << getName() << "-Home Page" << endl;
+void User::viewHome(vector <Post*>Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
+	cout << getName() << " | Home Page" << endl;
 	Date currentDate = *getCurrentDate();
 	for (int i = 0; i < friends.size(); i++)
 	{
@@ -195,10 +208,10 @@ void User::viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post
 		vector<string> posts = Users[index]->getPosts();
 		for (int j = 0; j < posts.size(); j++)
 		{
-			int index2 = idToNum(2, posts[j]) - 1;
-			Date datePosted = UserPosts[index2]->getDatePosted();
+			int index2 = idToNum(4, posts[j]) - 1;
+			Date datePosted = Posts[index2]->getDatePosted();
 			if (oneDayDiff(currentDate, datePosted))
-				UserPosts[index2]->showPost(Users, Pages, Comments);
+				Posts[index2]->showPost(Users, Pages, Comments);
 		}
 	}
 
@@ -208,40 +221,40 @@ void User::viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post
 		vector<string> posts = Pages[index]->getPosts();
 		for (int j = 0; j < posts.size(); j++)
 		{
-			int index2 = idToNum(2, posts[j]) - 1;
-			Date datePosted = PagePosts[index2]->getDatePosted();
+			int index2 = idToNum(4, posts[j]) - 1;
+			Date datePosted = Posts[index2]->getDatePosted();
 			if (oneDayDiff(currentDate, datePosted))
-				PagePosts[index2]->showPost(Users, Pages, Comments);
+				Posts[index2]->showPost(Users, Pages, Comments);
 		}
 	}
 }
-void User::shareMemory(string postID, string text, vector<Post*> UserPosts, vector<User*> Users) {
-	Post* source = UserPosts[idToNum(2, postID) - 1];
+void User::shareMemory(string postID, string text, vector<Post*>& Posts, vector<User*>& Users) {
+	Post* source = Posts[idToNum(4, postID) - 1];
 	string timeAgo = getTimeAgo(source);
 	string description = source->getDescription();
 	Date date = source->getDatePosted();
-	string userName = Users[idToNum(1, source->getOwnerID()) - 1]->getName();
+	string userName = getName();
 	Activity* activity = source->getActivity();
 	string memory;
 	if (activity != nullptr)
 		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + activity->getValue() + "\n   \"" + description + "\"...(" + date.stringDate() + ")";
 	else
-		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + "shared \"" + description + "\"...(" + date.stringDate() + ")";
-	Post* post = new Post(memory, nullptr, 0);
+		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + " shared \"" + description + "\"...(" + date.stringDate() + ")";
+	Post* post = new Post(memory, nullptr, 1);
 	post->setOwnerID(Entity::getID());
-	UserPosts.push_back(post);
+	Posts.push_back(post);
 	Users[idToNum(1, Entity::getID()) - 1]->addPost(post->getID());
 }
-void User::seeMemories(vector<User*> Users, vector<Post*> UserPosts, vector<Page*> Pages, vector<Comment*> Comments) {
+void User::seeMemories(vector<User*> Users, vector<Post*> Posts, vector<Page*> Pages, vector<Comment*> Comments) {
 	//show post on same date in following years
-	cout << "We hope you enjoy looking back and sharing your memories on Facebook, from the most recent to those long ago.\n\n";
+	cout << "We hope you enjoy looking back and sharing your memories on Facebook, from the most recent to those long ago.\n\nOn this Day\n";
 	vector <string> posts = getPosts();
 	for (int i = 0; i < posts.size(); i++) {
-		Date date = UserPosts[idToNum(2, posts[i]) - 1]->getDatePosted();
+		Date date = Posts[idToNum(4, posts[i]) - 1]->getDatePosted();
 		Date currentDate = *getCurrentDate();
 		if (currentDate.year - date.year > 0 && currentDate.month == date.month && currentDate.day == date.day) {
-			cout << "On this Day\n" + getTimeAgo(UserPosts[idToNum(2, posts[i]) - 1]);
-			UserPosts[idToNum(2, posts[i]) - 1]->showPost(Users, Pages, Comments);
+			cout << getTimeAgo(Posts[idToNum(4, posts[i]) - 1]);
+			Posts[idToNum(4, posts[i]) - 1]->showPost(Users, Pages, Comments);
 		}
 	}
 }

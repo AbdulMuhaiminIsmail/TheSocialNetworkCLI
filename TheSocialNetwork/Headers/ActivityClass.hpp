@@ -18,5 +18,7 @@ public:
 	Activity(int type = 0, string value = "");
 	int getType() const;
 	string getValue() const;
+	void setType(int type);
+	void setValue(string value);
 	void setActivity();
 };

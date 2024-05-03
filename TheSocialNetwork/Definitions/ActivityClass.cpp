@@ -7,6 +7,12 @@ int Activity::getType() const {
 string Activity::getValue() const {
 	return value;
 }
+void Activity::setType(int type) {
+	this->type = type;
+}
+void Activity::setValue(string value) {
+	this->value = value;
+}
 void Activity::setActivity() {
 	if (type != 0) {
 		string temp;

@@ -15,21 +15,27 @@
 using namespace std;
 
 class Page : public Entity {
-	int likes; //Stores the number of likes on the page
 	static int currentID; //Keeps track of the current page
+	int likes; //Stores the number of likes on the page
 	string ownerID; //Stores the ID of the owner of the page
 public:
+	Page();
 	Page(string ownerID, string title);
+	int getLikes();
 	string getID();
 	string getName();
-	vector <string> getPosts();
 	string getOwnerID();
-	int getLikes();
+	vector <string> getPosts();
+	void setLikes(int likes);
+	void setID(string ID);
+	void setName(string name);
+	void setOwnerID(string ownerID);
+	void setPosts(vector <string> posts);
 	void incLikes();
-	void likePost(string postID, vector <Post*>& UserPosts, vector <Post*>& PagePosts);
-	void comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& UserPosts, vector <Post*>& PagePosts);
-	void viewPage(vector <Post*> PagePosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
-	void createPost(vector <Post*>& PagePosts, vector <Page*>& Pages);
+	void likePost(string postID, vector <Post*>& Posts);
+	void comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& Posts);
+	void viewPage(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
+	void createPost(vector <Post*>& Posts, vector <Page*>& Pages);
 };
 
 

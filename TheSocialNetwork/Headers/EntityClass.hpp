@@ -1,6 +1,6 @@
 #pragma once
-#include<string>
-#include<vector>
+#include <string>
+#include <vector>
 using namespace std;
 
 class Entity {
@@ -8,9 +8,13 @@ class Entity {
 	string name; //Stores the full name of page/user
 	vector <string> posts; //Stores the ids of all posts
 public:
+	Entity();
 	Entity(string id, string name);
-	string getID();
-	string getName();
-	vector <string> getPosts();
+	string getID() const;
+	void setID(string id);
+	string getName() const;
+	void setName(string name);
+	vector <string> getPosts() const;
+	void setPosts(vector <string> posts);
 	void addPost(string postID);
 };

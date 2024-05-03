@@ -20,22 +20,32 @@ class User : public Entity {
 	vector <string> ownedPages; //Stores the ids of owned pages by the user
 	vector <string> likedPages; //Stores the ids of all liked pages
 public:
+	User();
 	User(string userName);
-	string getID();
-	string getName();
+	string getID() const;
+	string getName() const;
+	vector <string> getPosts() const;
+	vector <string> getFriends() const;
+	vector <string> getOwnedPages() const;
+	vector <string> getLikedPages() const;
+	void setID(string ID);
+	void setName(string name);
+	void setFriends(vector <string> friends);
+	void setOwnedPages(vector <string> ownedPages);
+	void setLikedPages(vector <string> likedPages);
+	void setPosts(vector <string> posts);
 	void printUser(vector <User*> Users, vector <Page*> Pages);
 	void showOwnedPages(vector <Page*>& Pages);
 	void showLikedPages(vector <Page*>& Pages);
 	void showFriends(vector <User*>& Users);
 	void createPage(string title, vector <Page*>& Pages);
-	void likePost(string postID, vector <Post*>& UserPosts, vector <Post*>& PagePosts);
-	void comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& UserPosts, vector <Post*>& PagePosts);
-	void createPost(vector <Post*>& UserPosts, vector <User*>& Users);
-	void likePage(string pageID, int& totalPages, vector <Page*>& Pages);
-	void addFriend(string& friendID, int& totalUsers);
-	void viewTimeline(vector <Post*> UserPosts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
-	void viewHome(vector <Post*> UserPosts, vector <User*> Users, vector <Post*> PagePosts, vector <Page*> Pages, vector <Comment*> Comments);
-	void shareMemory(string postID, string text, vector<Post*> UserPosts, vector<User*> Users);
-	void seeMemories(vector<User*> Users, vector<Post*> UserPosts, vector<Page*> Pages, vector<Comment*> Comments);
+	void createPost(vector <Post*>& Posts);
+	void likePage(string pageID, vector <Page*>& Pages);
+	void addFriend(string friendID, vector<User*>Users);
+	void comment(string postID, string text, vector <Comment*>& Comments, vector <Post*>& Posts);
+	void likePost(string postID, vector <Post*>& Posts);
+	void viewTimeline(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
+	void viewHome(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments);
+	void shareMemory(string postID, string text, vector<Post*>& Posts, vector<User*>& Users);
+	void seeMemories(vector<User*> Users, vector<Post*> Posts, vector<Page*> Pages, vector<Comment*> Comments);
 };
-
