@@ -1,5 +1,5 @@
 #include"../Headers/PostClass.hpp"
-Post::Post() : description(""), activity(nullptr), isMemory(0), likes(0), commentsCount(0), datePosted(nullptr), ownerID("") {};
+Post::Post() : postID("post" + to_string(currentID++)), description(""), activity(nullptr), isMemory(0), likes(0), commentsCount(0), datePosted(nullptr), ownerID("") {};
 Post::Post(string description, Activity* activity, bool isMemory) : description(description), activity(activity), isMemory(isMemory) {
 	datePosted = getCurrentDate();
 	postID = "post" + to_string(currentID++);

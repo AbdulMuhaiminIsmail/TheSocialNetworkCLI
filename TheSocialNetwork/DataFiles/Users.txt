@@ -1,17 +1,26 @@
-2
-u1
+3
 Abdul Muhaimin
-1
+2
 post1
+post2
 1
 u2
-0
 1
 p1
-u2
-Salman Khan
 1
-post2
+p1
+Salman Khan
+2
+post3
+post4
+1
+u1
+1
+p1
 0
+Bilal Nasir
+0
+1
+u1
 0
 0

@@ -12,15 +12,15 @@ string getTimeAgo(Post* source) {
 	string timeAgo;
 	if (source->getDatePosted().year != getCurrentDate()->year) {
 		int years = getCurrentDate()->year - source->getDatePosted().year;
-		timeAgo = "(" + to_string(years) + " Years Ago)";
+		timeAgo = "(" + to_string(years) + " Year(s) Ago)";
 	}
 	else if (source->getDatePosted().month != getCurrentDate()->month) {
 		int months = getCurrentDate()->month - source->getDatePosted().month;
-		timeAgo = "(" + to_string(months) + " Months Ago)";
+		timeAgo = "(" + to_string(months) + " Month(s) Ago)";
 	}
 	else if (source->getDatePosted().day != getCurrentDate()->day) {
 		int days = getCurrentDate()->day - source->getDatePosted().day;
-		timeAgo = "(" + to_string(days) + " Days Ago)";
+		timeAgo = "(" + to_string(days) + " Day(s) Ago)";
 	}
 	else {
 		timeAgo = "(Just a while ago)";
@@ -32,8 +32,8 @@ void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, ve
 	cout << "----------------------------------------------------------" << endl;
 	cout << "Post Liked By: " << endl;
 	int index = idToNum(4, postID) - 1;
-	vector <string> likedBy;
-	for (int i = 0; i < Posts.size(); i++) {
+	vector <string> likedBy = Posts[index]->getLikedBy();
+	for (int i = 0; i < likedBy.size(); i++) {
 		int currentIndex = idToNum(1, likedBy[i]) - 1;
 		if (likedBy[i][0] == 'u') {
 			cout << likedBy[i] << "-" << Users[currentIndex]->getName() << endl;

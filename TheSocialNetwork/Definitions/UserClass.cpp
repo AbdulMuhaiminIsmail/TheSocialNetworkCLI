@@ -1,5 +1,5 @@
 #include"../Headers/UserClass.hpp"
-User::User() : Entity() {}
+User::User() : Entity("u" + to_string(currentID++)) {}
 User::User(string userName) : Entity("u" + to_string(currentID++), userName) {}
 void User::setID(string id) {
 	Entity::setID(id);
@@ -49,6 +49,12 @@ vector <string> User::getLikedPages() const {
 void User::printUser(vector <User*> Users, vector <Page*> Pages) {
 	cout << "Name: " << getName() << endl;
 	cout << "UserID: " << getID() << endl;
+	cout << "Posts: \t";
+	vector <string> posts = getPosts();
+	for (int i = 0; i < posts.size(); i++) {
+		cout << posts[i] << "\t";
+	}
+	cout << endl;
 	showFriends(Users);
 	showLikedPages(Pages);
 	showOwnedPages(Pages);
@@ -84,18 +90,18 @@ void User::createPage(string title, vector <Page*>& Pages) {			//page comment sh
 	Page* page = new Page(Entity::getID(), title);
 	ownedPages.push_back(page->getID());
 	Pages.push_back(page);
-	cout << "Page created with name " << title << " and id " << page->getID() << endl;
+	cout << "Page created with name " << title << " and id " << page->getID() << endl << endl;
 }
 void User::createPost(vector<Post*>& Posts) {
 	int hasActivity, type;
 	string description;
 	cout << "What is the description of the post? ";
 	getline(cin, description);
-	cout << "Do you want to add any activity? (0.No/1.Yes)";
+	cout << "Do you want to add any activity? (0.No/1.Yes) ";
 	cin >> hasActivity;
 	if (hasActivity) {
 		do {
-			cout << "What kind of activity is this? (1.Feeling/2.Thinking/3.Making/4.Celebrating)";
+			cout << "What kind of activity is this? (1.Feeling/2.Thinking/3.Making/4.Celebrating) ";
 			cin >> type;
 			if (type < 1 || type > 4) {
 				cout << "Invalid type" << endl;
@@ -167,33 +173,33 @@ void User::likePage(string pageID, vector <Page*>& Pages) {
 }
 void User::addFriend(string friendID, vector<User*> Users) {
 	if (friendID[0] != 'u') {
-		cout << "The given User ID is invalid" << endl;
+		cout << "The user with given ID does not exist" << endl << endl;
 		return;
 	}
 	bool duplicate = false;
 	for (int i = 0; i < friends.size(); i++) {
 		if (friends[i] == friendID) {
 			duplicate = true;
-			cout << Users[idToNum(1, friendID) - 1]->getName() << " is already your friend" << endl;
+			cout << Users[idToNum(1, friendID) - 1]->getName() << " is already your friend" << endl << endl;
 			return;
 		}
 	}
 	if (friendID != getID()) {
 		if (idToNum(1, friendID)  <= Users.size()) {
 			friends.push_back(friendID);
-			cout << "Friend added successfully" << endl;
+			cout << "Friend added successfully" << endl << endl;
 		}
 		else {
-			cout << "The given User ID is invalid" << endl;
+			cout << "The user with given ID does not exist" << endl << endl;
 		}
 	}
 	else {
-		cout << "You can not friend yourself" << endl;
+		cout << "You can not friend yourself" << endl << endl;
 	}
 }
 void User::viewTimeline(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
 	vector <string> posts = getPosts();
-	cout << getName() << " | Timeline" << endl;
+	cout << getName() << " | Timeline" << endl << endl;
 	for (int i = 0; i < posts.size(); i++) {
 		int index = idToNum(4, posts[i]) - 1;
 		Posts[index]->showPost(Users, Pages, Comments);
@@ -229,33 +235,54 @@ void User::viewHome(vector <Post*>Posts, vector <User*> Users, vector <Page*> Pa
 	}
 }
 void User::shareMemory(string postID, string text, vector<Post*>& Posts, vector<User*>& Users) {
-	Post* source = Posts[idToNum(4, postID) - 1];
-	string timeAgo = getTimeAgo(source);
-	string description = source->getDescription();
-	Date date = source->getDatePosted();
-	string userName = getName();
-	Activity* activity = source->getActivity();
-	string memory;
-	if (activity != nullptr)
-		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + activity->getValue() + "\n   \"" + description + "\"...(" + date.stringDate() + ")";
-	else
-		memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + " shared \"" + description + "\"...(" + date.stringDate() + ")";
-	Post* post = new Post(memory, nullptr, 1);
-	post->setOwnerID(Entity::getID());
-	Posts.push_back(post);
-	Users[idToNum(1, Entity::getID()) - 1]->addPost(post->getID());
+	bool ownPost = false;
+	vector <string> posts = getPosts();
+	for (int i = 0; i < posts.size();i++) {
+		if (posts[i] == postID) {
+			ownPost = true;
+			Post* source = Posts[idToNum(4, postID) - 1];
+			string timeAgo = getTimeAgo(source);
+			string description = source->getDescription();
+			Date date = source->getDatePosted();
+			string userName = getName();
+			Activity* activity = source->getActivity();
+			string memory;
+			if (activity != nullptr)
+				memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + activity->getValue() + "\n   \"" + description + "\" ...(" + date.stringDate() + ")";
+			else
+				memory = "~~~ " + userName + " shared a memory ~~~ ...(" + getCurrentDate()->stringDate() + ")\n\"" + text + "\"\n\t" + timeAgo + "\n--- " + userName + " shared \"" + description + "\" ...(" + date.stringDate() + ")";
+			Post* post = new Post(memory, nullptr, 1);
+			post->setOwnerID(Entity::getID());
+			Posts.push_back(post);
+			Users[idToNum(1, Entity::getID()) - 1]->addPost(post->getID());
+		}
+	}
+	if (!ownPost) {
+		cout << "You can share memories, only of your own posts!" << endl << endl;
+	}
 }
 void User::seeMemories(vector<User*> Users, vector<Post*> Posts, vector<Page*> Pages, vector<Comment*> Comments) {
 	//show post on same date in following years
-	cout << "We hope you enjoy looking back and sharing your memories on Facebook, from the most recent to those long ago.\n\nOn this Day\n";
+	int introWritten = 0;
 	vector <string> posts = getPosts();
 	for (int i = 0; i < posts.size(); i++) {
 		Date date = Posts[idToNum(4, posts[i]) - 1]->getDatePosted();
 		Date currentDate = *getCurrentDate();
 		if (currentDate.year - date.year > 0 && currentDate.month == date.month && currentDate.day == date.day) {
-			cout << getTimeAgo(Posts[idToNum(4, posts[i]) - 1]);
-			Posts[idToNum(4, posts[i]) - 1]->showPost(Users, Pages, Comments);
+			if (!introWritten) {
+				cout << "We hope you enjoy looking back and sharing your memories on Facebook, from the most recent to those long ago.\n\nOn this Day\n";
+				cout << getTimeAgo(Posts[idToNum(4, posts[i]) - 1]) << endl;
+				Posts[idToNum(4, posts[i]) - 1]->showPost(Users, Pages, Comments);
+				introWritten++;
+			}
+			else {
+				cout << getTimeAgo(Posts[idToNum(4, posts[i]) - 1]) << endl;
+				Posts[idToNum(4, posts[i]) - 1]->showPost(Users, Pages, Comments);
+			}
 		}
+	}
+	if (!introWritten) {
+		cout << "There are no memories right now, check back later." << endl << endl;
 	}
 }
 

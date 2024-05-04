@@ -1,5 +1,5 @@
 #include"../Headers/CommentClass.hpp"
-Comment::Comment() : postID(""), posterID(""), text("") {}
+Comment::Comment() : commentID("c" + to_string(currentID++)), postID(""), posterID(""), text("") {}
 Comment::Comment(string postID, string posterID, string text) : commentID("c" + to_string(currentID++)), postID(postID), posterID(posterID), text(text) {}
 string Comment::getPostID() const {
 	return postID;

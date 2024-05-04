@@ -1,5 +1,5 @@
 #include"../Headers/PageClass.hpp"
-Page::Page() : Entity() {}
+Page::Page() : Entity("p" + to_string(currentID++)) { likes = 0; }
 Page::Page(string ownerID, string title) : Entity("p" + to_string(currentID++), title), ownerID(ownerID) { likes = 0; }
 string Page::getID() {
 	return Entity::getID();
@@ -43,7 +43,7 @@ void Page::incLikes() {
 }
 void Page::viewPage(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
 	vector <string> posts = getPosts();
-	cout << getName() << endl;
+	cout << getName() << " | View Page" << endl << endl;
 	for (int i = 0; i < posts.size(); i++) {
 		int index = idToNum(4, posts[i]) - 1;
 		Posts[index]->showPost(Users, Pages, Comments);

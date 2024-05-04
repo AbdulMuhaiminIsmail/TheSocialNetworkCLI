@@ -1,5 +1,5 @@
 #include"../Headers/EntityClass.hpp"
-Entity::Entity() : id(""), name("") {}
+Entity::Entity(string id) : id(id), name("") {}
 Entity::Entity(string id, string name) : id(id), name(name) {}
 string Entity::getID() const {
 	return id;

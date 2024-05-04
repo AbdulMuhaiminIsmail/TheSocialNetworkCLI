@@ -8,7 +8,7 @@ class Entity {
 	string name; //Stores the full name of page/user
 	vector <string> posts; //Stores the ids of all posts
 public:
-	Entity();
+	Entity(string id);
 	Entity(string id, string name);
 	string getID() const;
 	void setID(string id);

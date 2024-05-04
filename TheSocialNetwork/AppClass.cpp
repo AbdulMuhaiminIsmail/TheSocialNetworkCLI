@@ -45,24 +45,28 @@ public:
 	{
 		//Import Data from Files
 		importData();
-		printUser();
-		setCurrentUser("u2");
-		printUser();
 		//Displaying Main Menu
-		createUser("Abdul Muhaimin");
-		createUser("Salman Khan");
-		createPage("CNN");
-		printUser();
-		addFriend("u2");
-		createPost();
-		commentPost("post1", "This is a meta comment!");
+		//Interaction with the App
+		viewHome();
 		viewTimeline();
 		setCurrentUser("u2");
-		commentPost("post1", "This is sample comment 2!");
+		viewTimeline();
+		viewHome();
+		viewPage("p1");
+		createPage("CNN");
+		addFriend("u4");
 		createPost();
-		viewTimeline();
+		viewPost("post7");
+		setCurrentUser("u3");
+		showLikers("post1");
+		likePost("post1");
+		showLikers("post1");
+		commentPost("post1", "This is a test comment!");
+		viewPost("post1");
 		setCurrentUser("u1");
+		//shareMemory("post1", "This was the first post on the network");
 		viewTimeline();
+		seeYourMemories();
 		//Exporting Data to Files
 		exportData();
 		//Deallocating Memory
@@ -79,13 +83,10 @@ public:
 			usersFile >> totalUsers;
 			for (int i = 0; i < totalUsers; i++) {
 				User* user = new User();
-				//ID
-				string userID;
-				usersFile >> userID;
-				user->setID(userID);
 				//Name
 				string userName;
-				getline(usersFile, userName);
+				usersFile.ignore();
+				getline(usersFile,  userName);
 				user->setName(userName); 
 				//Posts
 				int totalPosts;
@@ -142,13 +143,10 @@ public:
 			pagesFile >> totalPages;
 			for (int i = 0; i < totalPages; i++) {
 				Page* page = new Page();
-				//ID
-				string pageID;
-				pagesFile >> pageID;
-				page->setID(pageID);
 				//Name
 				string pageName;
-				pagesFile >> pageName;
+				pagesFile.ignore();
+				getline(pagesFile, pageName);
 				page->setName(pageName); 
 				//Likes
 				int totalLikes;
@@ -183,17 +181,14 @@ public:
 			postsFile >> totalPosts;
 			for (int i = 0; i < totalPosts; i++) {
 				Post* post = new Post();
-				//ID
-				string postID;
-				postsFile >> postID;
-				post->setID(postID);
 				//OwnerID
 				string ownerID;
 				postsFile >> ownerID;
 				post->setOwnerID(ownerID);
 				//Description
 				string description;
-				postsFile >> description;
+				postsFile.ignore();
+				getline(postsFile, description);
 				post->setDescription(description);
 				//Memory
 				bool isMemory;
@@ -221,7 +216,8 @@ public:
 					int type;
 					string value;
 					postsFile >> type;
-					postsFile >> value;
+					postsFile.ignore();
+					getline(postsFile, value);
 					Activity* activity = new Activity(type, value);
 					post->setActivity(activity);
 				}
@@ -236,14 +232,16 @@ public:
 					postsFile >> currentComment;
 					comments.push_back(currentComment);
 				}
+				post->setComments(comments);
 				//Likers
 				vector <string> likedBy;
 				for (int i = 0; i < totalLikes; i++)
 				{
 					string currentLiker;
 					postsFile >> currentLiker;
-					comments.push_back(currentLiker);
+					likedBy.push_back(currentLiker);
 				}
+				post->setLikedBy(likedBy);
 				//Adding post to main vector
 				Posts.push_back(post);
 			}
@@ -260,10 +258,6 @@ public:
 			for (int i = 0; i < totalComments; i++)
 			{
 				Comment* comment = new Comment();
-				//CommentID
-				string commentID;
-				commentsFile >> commentID;
-				comment->setCommentID(commentID);
 				//PostID
 				string postID;
 				commentsFile >> postID;
@@ -274,7 +268,8 @@ public:
 				comment->setPosterID(posterID);
 				//Text
 				string text;
-				commentsFile >> text;
+				commentsFile.ignore();
+				getline(commentsFile, text);
 				comment->setText(text);
 				//Adding comment to main vector
 				Comments.push_back(comment);
@@ -292,8 +287,7 @@ public:
 			//Total users
 			usersFile << Users.size() << endl;
 			for (int i = 0; i < Users.size();i++) {
-				//ID, Name and PostIDs
-				usersFile << Users[i]->getID() << endl;
+				//Name
 				usersFile << Users[i]->getName() << endl;
 				//Posts
 				usersFile << Users[i]->getPosts().size() << endl;
@@ -326,8 +320,7 @@ public:
 			//Total Pages
 			pagesFile << Pages.size() << endl;
 			for (int i = 0; i < Pages.size();i++) {
-				//ID, Name, Likes, OwnerID
-				pagesFile << Pages[i]->getID() << endl;
+				//Name
 				pagesFile << Pages[i]->getName() << endl;
 				pagesFile << Pages[i]->getLikes() << endl;
 				pagesFile << Pages[i]->getOwnerID() << endl;
@@ -347,8 +340,7 @@ public:
 			//Total Posts
 			postsFile << Posts.size() << endl;
 			for (int i = 0; i < Posts.size();i++) {
-				//ID, OwnerID, Likes, Comments, isMemory, Description
-				postsFile << Posts[i]->getID() << endl;
+				//OwnerID, Likes, Comments, isMemory, Description
 				postsFile << Posts[i]->getOwnerID() << endl;
 				postsFile << Posts[i]->getDescription() << endl;
 				postsFile << Posts[i]->getIsMemory() << endl;
@@ -386,8 +378,7 @@ public:
 			//Total Comments
 			commentsFile << Comments.size() << endl;
 			for (int i = 0; i < Comments.size();i++) {
-				//ID, PostID, PosterID, Text
-				commentsFile << Comments[i]->getCommentID() << endl;
+				//PostID, PosterID, Text
 				commentsFile << Comments[i]->getPostID() << endl;
 				commentsFile << Comments[i]->getPosterID() << endl;
 				commentsFile << Comments[i]->getText() << endl;
@@ -417,9 +408,16 @@ public:
 		Users[index]->createPage(title, Pages);
 	}
 	void setCurrentUser(string userID) {
-		currentUser = userID;
+		int index = idToNum(1, userID) - 1;
+		if (index >= Users.size()) {
+			cout << "The user with given ID does not exist" << endl << endl;
+		}
+		else {
+			currentUser = userID;
+			cout << Users[index]->getName() << "(" << userID << ") successfully set as the current user!" << endl << endl;
+		}
 	}
-	void viewLikesPages() {
+	void viewLikedPages() {
 		int index = idToNum(1, currentUser) - 1;
 		Users[index]->showLikedPages(Pages);
 	}
@@ -428,22 +426,47 @@ public:
 		Users[index]->viewHome(Posts, Users, Pages, Comments);
 	} 
 	void likePost(string postID) {
-		int index = idToNum(1, currentUser) - 1;
+		int index = idToNum(4, postID) - 1;
+		if (index >= Posts.size()) {
+			cout << "The post with given ID does not exist" << endl << endl;
+			return;
+		}
+		index = idToNum(1, currentUser) - 1;
 		Users[index]->likePost(postID, Posts);
 	}
 	void showLikers(string postID) {
+		int index = idToNum(4, postID) - 1;
+		if (index >= Posts.size()) {
+			cout << "The post with given ID does not exist" << endl << endl;
+			return;
+		}
 		showLikedBy(postID, Users, Pages, Posts);
 	}
 	void commentPost(string postID, string comment) {
-		int index = idToNum(1, currentUser) - 1;
+		int index = idToNum(4, postID) - 1;
+		if (index >= Posts.size()) {
+			cout << "The post with given ID does not exist" << endl << endl;
+			return;
+		}
+		index = idToNum(1, currentUser) - 1;
 		Users[index]->comment(postID, comment, Comments, Posts);
 	}
 	void viewPost(string postID) {
 		int index = idToNum(4, postID) - 1;
+		if (index >= Posts.size()) {
+			cout << "The post with given ID does not exist" << endl << endl;
+			return;
+		}
+		index = idToNum(4, postID) - 1;
 		Posts[index]->showPost(Users, Pages, Comments);
 	}
 	void shareMemory(string postID, string text) {
-		int index = idToNum(1, currentUser) - 1;
+		int index = idToNum(4, postID) - 1;
+		if (index >= Posts.size()) {
+			cout << "The post with given ID does not exist" << endl << endl;
+			return;
+		}
+		index = idToNum(1, currentUser) - 1;
 		Users[index]->shareMemory(postID, text, Posts, Users);
 	}
 	void seeYourMemories() {
@@ -460,6 +483,11 @@ public:
 	}
 	void viewPage(string pageID) {
 		int index = idToNum(1, pageID) - 1;
+		if (index >= Pages.size()) {
+			cout << "The page with given ID does not exist" << endl << endl;
+			return;
+		}
+		index = idToNum(1, pageID) - 1;
 		Pages[index]->viewPage(Posts, Users, Pages, Comments);
 	}
 	void DeallocMem() {
