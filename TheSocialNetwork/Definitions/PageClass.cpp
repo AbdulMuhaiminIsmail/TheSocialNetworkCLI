@@ -43,11 +43,13 @@ void Page::incLikes() {
 }
 void Page::viewPage(vector <Post*> Posts, vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
 	vector <string> posts = getPosts();
+	cout << "----------------------------------------------------------" << endl;
 	cout << getName() << " | View Page" << endl << endl;
 	for (int i = 0; i < posts.size(); i++) {
 		int index = idToNum(4, posts[i]) - 1;
 		Posts[index]->showPost(Users, Pages, Comments);
 	}
+	cout << endl << "----------------------------------------------------------" << endl;
 }
 void Page::likePost(string postID, vector <Post*>& Posts) {
 	int index = idToNum(4, postID) - 1;
@@ -80,13 +82,13 @@ void Page::comment(string postID, string text, vector <Comment*>& Comments, vect
 void Page::createPost(vector <Post*>& Posts, vector <Page*>& Pages) {
 	int hasActivity, type;
 	string description;
-	cout << "What is the description of the post? ";
+	cout << endl << "What is the description of the post? ";
 	getline(cin, description);
-	cout << "Do you want to add any activity? (0.No/1.Yes)";
+	cout << "Do you want to add any activity? (0.No/1.Yes) ";
 	cin >> hasActivity;
 	if (hasActivity) {
 		do {
-			cout << "What kind of activity is this? (1.Feeling/2.Thinking/3.Making/4.Celebrating)";
+			cout << "What kind of activity is this? (1.Feeling/2.Thinking/3.Making/4.Celebrating) ";
 			cin >> type;
 			if (type < 1 || type > 4) {
 				cout << "Invalid type" << endl;
@@ -101,6 +103,7 @@ void Page::createPost(vector <Post*>& Posts, vector <Page*>& Pages) {
 		string currentPageID = Entity::getID();
 		int pageID = idToNum(1, currentPageID) - 1;
 		Pages[pageID]->addPost(post->getID());
+		cout << "Post created successfully, with post ID - " << post->getID() << endl;
 	}
 	else {
 		Post* post = new Post(description, nullptr, 0);
@@ -109,6 +112,7 @@ void Page::createPost(vector <Post*>& Posts, vector <Page*>& Pages) {
 		string currentUserID = Entity::getID();
 		int userID = idToNum(1, currentUserID) - 1;
 		Pages[userID]->addPost(post->getID());			//Added post's address to Pages' posts vector
+		cout << "Post created successfully, with post ID - " << post->getID() << endl;
 		cin.ignore(256, '\n');
 	}
 }

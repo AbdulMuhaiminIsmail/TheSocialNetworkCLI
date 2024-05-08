@@ -39,39 +39,202 @@ class App
 	vector<Page*> Pages;
 	vector<Post*> Posts;
 	vector<Comment*> Comments;
-	string currentUser = "u1";
+	string currentUser = "";
 public:
-	void Run()
+	void run()
 	{
 		//Import Data from Files
 		importData();
-		//Displaying Main Menu
-		//Interaction with the App
-		viewHome();
-		viewTimeline();
-		setCurrentUser("u2");
-		viewTimeline();
-		viewHome();
-		viewPage("p1");
-		createPage("CNN");
-		addFriend("u4");
-		createPost();
-		viewPost("post7");
-		setCurrentUser("u3");
-		showLikers("post1");
-		likePost("post1");
-		showLikers("post1");
-		commentPost("post1", "This is a test comment!");
-		viewPost("post1");
-		setCurrentUser("u1");
-		//shareMemory("post1", "This was the first post on the network");
-		viewTimeline();
-		seeYourMemories();
+		//Interaction Main Menu
+		mainMenu();
 		//Exporting Data to Files
 		exportData();
 		//Deallocating Memory
-		DeallocMem();
+		deallocMem();
 	}
+	void mainMenu() {
+		int choice;
+
+		do {
+
+			// Clear the screen
+			cout << "\033[2J\033[1;1H"; 
+
+			// Print title
+			printTitle();
+
+			// Display menu options
+			printMenu();
+
+			// Get user choice
+			cout << " \t\t\t\t\t\t\t\t\t\t    Enter your choice: ";
+
+			// If character is entered
+			if (!(cin >> choice)) {
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				choice = -2;
+			}
+
+			// If current user not selected
+			if (choice != 1 && currentUser == "" && (choice > -1 && choice < 15) && choice != 2 && choice != 0) {
+				choice = -1;
+			}
+
+			// Required variables
+			string userID, postID, pageTitle, pageID, commentText, text, username;
+
+			// Perform action based on user choice
+			switch (choice) {
+			case -2:
+				cout << endl << "Entering characters is not allowed, use numbers only!" << endl;
+				break;
+			case -1:
+				cout << "Accessing this functionality, without setting up a user first, is an act of absurdity!" << endl;
+				break;
+			case 1:
+				cout << "Enter User ID: ";
+				cin >> userID;
+				setCurrentUser(userID);
+				break;
+			case 2:
+				cout << "Enter User Name: ";
+				cin.ignore();
+				getline(cin, username);
+				createUser(username);
+				break;
+			case 3:
+				viewHome();
+				break;
+			case 4:
+				viewTimeline();
+				break;
+			case 5:
+				viewOwnedPages();
+				break;
+			case 6:
+				viewLikedPages();
+				break;
+			case 7:
+				cout << "Enter Page Title: ";
+				cin.ignore();
+				getline(cin, pageTitle);
+				createPage(pageTitle);
+				break;
+			case 8:
+				cout << "Enter Page ID: ";
+				cin >> pageID;
+				viewPage(pageID);
+				break;
+			case 9:
+				cout << "Enter Page ID: ";
+				cin >> pageID;
+				likePage(pageID);
+				break;
+			case 10:
+				cout << "Enter Page ID: ";
+				cin >> pageID;
+				viewPageLikes(pageID);
+				break;
+			case 11:
+				createPost();
+				break;
+			case 12:
+				cout << "Enter Post ID: ";
+				cin >> postID;
+				viewPost(postID);
+				break;
+			case 13:
+				cout << "Enter Post ID: ";
+				cin >> postID;
+				likePost(postID);
+				break;
+			case 14:
+				cout << "Enter Post ID: ";
+				cin >> postID;
+				cout << "Enter Comment: ";
+				cin.ignore();
+				getline(cin, commentText);
+				commentPost(postID, commentText);
+				break;
+			case 15:
+				cout << "Enter Post ID: ";
+				cin >> postID;
+				showLikers(postID);
+				break;
+			case 16:
+				seeYourMemories();
+				break;
+			case 17:
+				cout << "Enter Post ID: ";
+				cin >> postID;
+				cout << "Enter Text: ";
+				cin.ignore();
+				getline(cin, text);
+				shareMemory(postID, text);
+				break;
+			case 18:
+				viewFriends();
+				break;
+			case 19:
+				cout << "Enter User ID: ";
+				cin >> userID;
+				addFriend(userID);
+				break;
+			case 0:
+				cout << "Exporting the data, closing the files, exiting program, success!" << endl;
+				break;
+			default:
+				cout << "This option is not available, as it is out of the allowed range!" << endl;
+				break;
+			}
+
+			// Wait for user input before clearing the screen
+			cout << "Press Enter to clear the screen!";
+			cin.ignore(); // Ignore any leftover newline characters
+			cin.get(); // Wait for Enter key press
+
+		} while (choice != 0);
+	}
+	void printTitle() {
+		std::cout << "\t\t\t\t\t _____   _              ____                   _           _   _   _          _                               _    " << std::endl;
+		std::cout << "\t\t\t\t\t|_   _| | |__     ___  / ___|    ___     ___  (_)   __ _  | | | \\ | |   ___  | |_  __      __   ___    _ __  | | __" << std::endl;
+		std::cout << "\t\t\t\t\t  | |   | '_ \\   / _ \\ \\___ \\   / _ \\   / __| | |  / _` | | | | \\| |  / _ \\ | __| \\ \\ /\\ / /  / _ \\  | '__| | |/ /" << std::endl;
+		std::cout << "\t\t\t\t\t  | |   | | | | |  __/  ___) | | (_) | | (__  | | | (_| | | | | |\\  | |  __/ | |_   \\ V  V /  | (_) | | |     |   < " << std::endl;
+		std::cout << "\t\t\t\t\t  |_|   |_| |_|  \\___| |____/   \\___/   \\___| |_|  \\__,_| |_| |_| \\_|  \\___|  \\__|   \\_/\\_/    \\___/  |_|    |_|\\_\\" << std::endl;
+		std::cout << "\t\t\t\t\t                                                                                                                    " << std::endl;
+	}
+	void printMenu() {
+				std::cout << R"(
+							  +---------------------------------------------------------------------+
+							  |                                                                     |
+							  |                           <<< Main Menu >>>                         |
+							  |                                                                     |
+							  |           User                         General                      |
+							  |           ------------------           -------------------          |
+							  |           1. Set/Switch User           3. View Home                 |
+							  |           2. Create User               4. View Timeline             |
+							  |                                                                     |
+							  |           Pages                        Posts                        |
+							  |           -------------------          -------------------          |
+							  |           5. View Owned Pages          11. Create Post              |
+							  |           6. View Liked Pages          12. View Post                |
+							  |           7. Create Page               13. Like Post                |
+							  |           8. View Page                 14. Comment Post             |
+							  |           9. Like Page                 15. View Likers              |
+							  |           10. View Likes                                            |
+							  |                                                                     |
+							  |           Memories                     Friends                      |
+							  |           -------------------          -------------------          |
+							  |           16. View Memories            18. View Friends             |
+							  |           17. Share Memory             19. Add Friend               |
+							  |                                                                     |
+							  |				 0. Exit                                |
+							  |                                                                     |
+							  +---------------------------------------------------------------------+
+			)" << std::endl;
+
+}
 	void importData() {
 		ifstream usersFile("DataFiles/Users.txt");
 		if (!usersFile.is_open()) {
@@ -189,7 +352,19 @@ public:
 				string description;
 				postsFile.ignore();
 				getline(postsFile, description);
-				post->setDescription(description);
+				if (description[0] != '~') {
+					post->setDescription(description);
+				}
+				else {
+					string memoryDescription = description + '\n';
+					string line1, line2, line3, line4;
+					getline(postsFile, line1);
+					getline(postsFile, line2);
+					getline(postsFile, line3);
+					getline(postsFile, line4);
+					memoryDescription = description + "\n" + line1 + "\n" + line2 + "\n" + line3 + "\n"  + line4;
+					post->setDescription(memoryDescription);
+				}
 				//Memory
 				bool isMemory;
 				postsFile >> isMemory;
@@ -389,7 +564,7 @@ public:
 	void createUser(string userName) {
 		User* user = new User(userName);
 		Users.push_back(user);
-		cout << "User " << userName << " created successfully with userID: " << user->getID() << endl;
+		cout << "User " << userName << " created successfully with user ID -  " << user->getID() << endl;
 	}
 	void addFriend(string friendID) {
 		int index = idToNum(1, currentUser) - 1;
@@ -407,15 +582,49 @@ public:
 		int index = idToNum(1, currentUser) - 1;
 		Users[index]->createPage(title, Pages);
 	}
+	void likePage(string pageID) {
+		if (pageID[1] < 48 || pageID[1] > 57 || pageID[0] != 'p') {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe given page ID is invalid!" << endl << endl;
+			return;
+		}
+		int index = idToNum(1, pageID) - 1;
+		if (index >= Pages.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe page with given ID does not exist!" << endl << endl;
+			return;
+		}
+		index = idToNum(1, currentUser) - 1;
+		Users[index]->likePage(pageID, Pages);
+	}
+	void viewPageLikes(string pageID) {
+		if (pageID[1] < 48 || pageID[1] > 57 || pageID[0] != 'p') {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe given page ID is invalid!" << endl << endl;
+			return;
+		}
+		int index = idToNum(1, pageID) - 1;
+		if (index >= Pages.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe page with given ID does not exist!" << endl << endl;
+			return;
+		}
+		index = idToNum(1, pageID) - 1;
+		cout << endl << "Total Page Likes: " << Pages[index]->getLikes() << endl;
+	}
 	void setCurrentUser(string userID) {
+		if (userID[1] < 48 || userID[1] > 57 || userID[0] != 'u') {
+			cout << "The given user ID is invalid" << endl << endl;
+			return;
+		}
 		int index = idToNum(1, userID) - 1;
 		if (index >= Users.size()) {
-			cout << "The user with given ID does not exist" << endl << endl;
+			cout << " \t\t\t\t\t\t\t\t\t\tThe user with given ID does not exist" << endl << endl;
 		}
 		else {
 			currentUser = userID;
-			cout << Users[index]->getName() << "(" << userID << ") successfully set as the current user!" << endl << endl;
+			cout << " \n\t\t\t\t\t\t\t\t   " << Users[index]->getName() << " (" << userID << ") successfully set as the current user!" << endl << endl;
 		}
+	}
+	void viewOwnedPages() {
+		int index = idToNum(1, currentUser) - 1;
+		Users[index]->showOwnedPages(Pages);
 	}
 	void viewLikedPages() {
 		int index = idToNum(1, currentUser) - 1;
@@ -426,47 +635,52 @@ public:
 		Users[index]->viewHome(Posts, Users, Pages, Comments);
 	} 
 	void likePost(string postID) {
-		int index = idToNum(4, postID) - 1;
-		if (index >= Posts.size()) {
-			cout << "The post with given ID does not exist" << endl << endl;
+		string temp;
+		for (int i = 0; i < 4; i++) { temp += postID; }
+		if (postID.length() < 5 || temp != "post" || idToNum(4, postID) - 1 >= Posts.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe post with given ID does not exist" << endl << endl;
 			return;
 		}
-		index = idToNum(1, currentUser) - 1;
+		int index = idToNum(1, currentUser) - 1;
 		Users[index]->likePost(postID, Posts);
 	}
 	void showLikers(string postID) {
-		int index = idToNum(4, postID) - 1;
-		if (index >= Posts.size()) {
-			cout << "The post with given ID does not exist" << endl << endl;
+		string temp;
+		for (int i = 0; i < 4; i++) { temp += postID[i]; }
+		if (postID.length() < 5 || temp != "post" || idToNum(4, postID) - 1 >= Posts.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe post with given ID does not exist" << endl << endl;
 			return;
 		}
 		showLikedBy(postID, Users, Pages, Posts);
 	}
 	void commentPost(string postID, string comment) {
-		int index = idToNum(4, postID) - 1;
-		if (index >= Posts.size()) {
-			cout << "The post with given ID does not exist" << endl << endl;
+		string temp;
+		for (int i = 0; i < 4; i++) { temp += postID[i]; }
+		if (postID.length() < 5 || temp != "post" || idToNum(4, postID) - 1 >= Posts.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe post with given ID does not exist" << endl << endl;
 			return;
 		}
-		index = idToNum(1, currentUser) - 1;
+		int index = idToNum(1, currentUser) - 1;
 		Users[index]->comment(postID, comment, Comments, Posts);
 	}
 	void viewPost(string postID) {
-		int index = idToNum(4, postID) - 1;
-		if (index >= Posts.size()) {
-			cout << "The post with given ID does not exist" << endl << endl;
+		string temp;
+		for (int i = 0; i < 4; i++) { temp += postID[i]; }
+		if (postID.length() < 5 || temp != "post" || idToNum(4, postID) - 1 >= Posts.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe post with given ID does not exist" << endl << endl;
 			return;
 		}
-		index = idToNum(4, postID) - 1;
+		int index = idToNum(4, postID) - 1;
 		Posts[index]->showPost(Users, Pages, Comments);
 	}
 	void shareMemory(string postID, string text) {
-		int index = idToNum(4, postID) - 1;
-		if (index >= Posts.size()) {
-			cout << "The post with given ID does not exist" << endl << endl;
+		string temp;
+		for (int i = 0; i < 4; i++) { temp += postID[i]; }
+		if (postID.length() < 5 || temp != "post" || idToNum(4, postID) - 1 >= Posts.size()) {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe post with given ID does not exist" << endl << endl;
 			return;
 		}
-		index = idToNum(1, currentUser) - 1;
+		int index = idToNum(1, currentUser) - 1;
 		Users[index]->shareMemory(postID, text, Posts, Users);
 	}
 	void seeYourMemories() {
@@ -482,15 +696,19 @@ public:
 		Users[index]->showFriends(Users);
 	}
 	void viewPage(string pageID) {
+		if (pageID[1] < 48 || pageID[1] > 57 || pageID[0] != 'p') {
+			cout << " \t\t\t\t\t\t\t\t\t\tThe given page ID is invalid!" << endl << endl;
+			return;
+		}
 		int index = idToNum(1, pageID) - 1;
 		if (index >= Pages.size()) {
-			cout << "The page with given ID does not exist" << endl << endl;
+			cout << " \t\t\t\t\t\t\t\t\t\tThe page with given ID does not exist!" << endl << endl;
 			return;
 		}
 		index = idToNum(1, pageID) - 1;
 		Pages[index]->viewPage(Posts, Users, Pages, Comments);
 	}
-	void DeallocMem() {
+	void deallocMem() {
 		for (User *user : Users)
 		{
 			delete user;
@@ -513,5 +731,5 @@ public:
 int main()
 {
 	App app;
-	app.Run();
+	app.run();
 }

@@ -1,11 +1,13 @@
 #include"../Headers/HelperClass.hpp"
 
 int idToNum(int start, string id) {
-	string index;
+	char* index = new char[3];
 	for (int i = start; i < id.length(); i++) {
 		index[i - start] = id[i];
 	}
-	return stoi(index);
+	int result = stoi(index);
+	delete index;
+	return result;
 }
 
 string getTimeAgo(Post* source) {

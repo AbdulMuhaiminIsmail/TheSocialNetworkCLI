@@ -86,6 +86,7 @@ void Post::addLikedBy(string liker) {
 }
 void Post::addComment(string commentID) {
 	comments.push_back(commentID);
+	incComments();
 }
 void Post::incLikes() {
 	if (likes < 10) {
@@ -98,6 +99,7 @@ void Post::incComments() {
 	}
 }
 void Post::showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*> Comments) {
+	cout << endl;
 	if (!isMemory) {
 		int index = idToNum(1, ownerID) - 1;
 		if (ownerID[0] == 'u') {
@@ -107,7 +109,7 @@ void Post::showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*
 			cout << "--- " << Pages[index]->getName();
 		}
 		if (activity == nullptr) {
-			cout << " shared \"" << description << "\"" << endl;
+			cout << " shared\n\t \"" << description << "\"" << endl;
 		}
 		else {
 			cout << activity->getValue() << "\n\t\"" << description << "\"" << endl;
@@ -119,9 +121,8 @@ void Post::showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*
 		}
 	}
 	else {
-		cout << description;
+		cout << description << endl;
 	}
-	cout<<endl<<endl;
 }
 Post::~Post() {
 	delete activity;
