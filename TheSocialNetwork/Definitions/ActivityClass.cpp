@@ -16,6 +16,7 @@ void Activity::setValue(string value) {
 void Activity::setActivity() {
 	if (type != 0) {
 		string temp;
+		cout<<" \t\t\t\t\t\t\t\t\t";
 		if (type == 1) {
 			cout << "What are you feeling? (Happy/Sad/Excited/Other) ";
 			getline(cin, temp);

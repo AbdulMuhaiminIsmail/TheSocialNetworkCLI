@@ -31,9 +31,8 @@ string getTimeAgo(Post* source) {
 }
 
 void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, vector <Post*>& Posts) {
-	cout << "----------------------------------------------------------" << endl;
-	cout << "Post Liked By: " << endl;
 	int index = idToNum(4, postID) - 1;
+	cout << "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << endl << "						   \t\t\t\t" << "Post " << index+1 << " | View Liked By" << endl;
 	vector <string> likedBy = Posts[index]->getLikedBy();
 	for (int i = 0; i < likedBy.size(); i++) {
 		int currentIndex = idToNum(1, likedBy[i]) - 1;
@@ -44,7 +43,7 @@ void showLikedBy(string postID, vector <User*>& Users, vector <Page*>& Pages, ve
 			cout << likedBy[i] << "-" << Pages[currentIndex]->getName() << endl;
 		}
 	}
-	cout << "----------------------------------------------------------" << endl;
+	cout << "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
 }
 
 Date* getCurrentDate() {

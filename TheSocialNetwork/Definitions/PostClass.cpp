@@ -109,7 +109,7 @@ void Post::showPost(vector <User*> Users, vector <Page*> Pages, vector <Comment*
 			cout << "--- " << Pages[index]->getName();
 		}
 		if (activity == nullptr) {
-			cout << " shared\n\t \"" << description << "\"" << endl;
+			cout << " shared\n\t\"" << description << "\"" << endl;
 		}
 		else {
 			cout << activity->getValue() << "\n\t\"" << description << "\"" << endl;
