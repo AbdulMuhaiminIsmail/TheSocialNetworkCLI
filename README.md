@@ -1,103 +1,57 @@
 # TheSocialNetworkCLI
-This project involves developing a rudimentary command-line interface social media platform, designed to emulate the core features of Facebook. This assignment is part of my coursework in Object-Oriented Programming at university.
 
-# Description:
+## 🚀 Overview
+**TheSocialNetworkCLI** is a command-line social media platform designed to emulate core features of platforms like Facebook. This project is part of my **Object-Oriented Programming coursework** at university, showcasing key concepts like encapsulation, inheritance, and polymorphism. It provides users with a basic yet functional interface to connect, create, and share.
 
-It allows users to create posts, like and comment on posts, connect with friends, create and like pages, and more.
+---
 
-# Functions:
+## ✨ Features
+### **Core Functionalities**
+- **User Management**:
+  - Create users and add friends to your friend list.
+  - View user information and manage connections.
+- **Social Interaction**:
+  - Create, like, and comment on posts.
+  - Share memories and view your shared memories.
+- **Pages Management**:
+  - Create pages, like pages, and view owned or liked pages.
+  - Display likes and posts on specific pages.
+- **Personalized Experience**:
+  - View a personalized home feed (posts from friends and liked pages).
+  - Explore your timeline with posts from friends and yourself.
 
-importData()
+---
 
-    Reads data from external files to populate the app's data structures, including users, pages, posts, and comments.
+## 🛠️ Functionality Breakdown
 
-exportData()
+### **Data Management**
+- `importData()`: Reads data from external files to populate app structures (users, pages, posts, comments).
+- `exportData()`: Writes current data structures to files for future use.
 
-    Writes data from the app's data structures to external files for storage and future use.
+### **User Features**
+- `createUser(string userName)`: Adds a new user to the platform.
+- `addFriend(string friendID)`: Adds a friend to the current user’s friend list.
+- `setCurrentUser(string userID)`: Switches the session to the specified user.
+- `printUser()`: Displays the current user’s profile information.
+- `viewFriends()`: Lists the current user's friends.
 
-createUser(string userName)
+### **Post Features**
+- `createPost()`: Allows users or pages to create posts.
+- `likePost(string postID)`: Lets users like a specific post.
+- `showLikers(string postID)`: Displays users who have liked a post.
+- `commentPost(string postID, string comment)`: Adds a comment to a specific post.
+- `viewPost(string postID)`: Displays a specific post along with its comments.
+- `viewHome()`: Shows posts from friends and liked pages in the home feed.
+- `viewTimeline()`: Displays the user's timeline, including their posts and content from friends or liked pages.
+- `shareMemory(string postID, string text)`: Shares a memory from an existing post.
+- `seeYourMemories()`: Displays all shared memories by the user.
 
-    Creates a new user with the given name and adds them to the app.
+### **Page Features**
+- `createPage(string title)`: Creates a new page with the given title.
+- `likePage(string pageID)`: Likes a specific page.
+- `viewPageLikes(string pageID)`: Displays the total likes on a page.
+- `viewPage(string pageID)`: Shows the details and posts of a specific page.
+- `viewOwnedPages()`: Lists all pages owned by the current user.
+- `viewLikedPages()`: Lists all pages liked by the current user.
 
-addFriend(string friendID)
-
-    Adds a friend to the current user's friend list.
-
-printUser()
-
-    Displays information about the current user.
-
-createPost()
-
-    Allows the user to create a post as either a user or a page.
-
-createPage(string title)
-
-    Creates a new page with the given title.
-
-likePage(string pageID)
-
-    Allows the current user to like a page.
-
-viewPageLikes(string pageID)
-
-    Displays the total number of likes for a page.
-
-setCurrentUser(string userID)
-
-    Sets the current user to the user with the given ID.
-
-viewOwnedPages()
-
-    Displays the pages owned by the current user.
-
-viewLikedPages()
-
-    Displays the pages liked by the current user.
-
-viewHome()
-
-    Displays the home feed of the current user, including posts from friends and liked pages.
-
-likePost(string postID)
-
-    Allows the current user to like a post.
-
-showLikers(string postID)
-
-    Displays the users who have liked a post.
-
-commentPost(string postID, string comment)
-
-    Allows the current user to comment on a post.
-
-viewPost(string postID)
-
-    Displays a specific post with its details and comments.
-
-shareMemory(string postID, string text)
-
-    Allows the current user to share a memory from a post.
-
-seeYourMemories()
-
-    Displays memories shared by the current user.
-
-viewTimeline()
-
-    Displays the timeline of the current user, including their own posts and posts from friends and liked pages.
-
-viewFriends()
-
-    Displays the friends of the current user.
-
-viewPage(string pageID)
-
-    Displays the details and posts of a specific page.
-
-Usage:
-
-    Use the provided functions to navigate and interact with TheSocial Media App.
-    Follow the prompts and input requirements to perform various actions such as creating users, posts, pages, liking content, and more.
-
-Feel free to explore the app and enjoy connecting with others in the virtual realm of TSN!
+---
